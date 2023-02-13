@@ -1,0 +1,5 @@
+- [ ] 3D gaussian distribution function
+- [ ] Use gaussians to generate galaxy
+- [ ] Add basic planet generation with names
+- [ ] serialize galaxy
+- [ ] Add planet generator w/ quadtree?
