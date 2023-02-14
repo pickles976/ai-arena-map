@@ -3,24 +3,9 @@ import { postfixes, prefixes, starTypes } from "./distributions.js"
 import { getRandomItem, uuid } from "./util.js";
 import {words} from "./words.js"
 
-const OPACITY = 0.05
-
-// const geometry = new THREE.SphereGeometry( 0.5, 12, 8 );
-// const materials = starTypes.color.map((color) => new THREE.MeshStandardMaterial( { color: color, emissive: color } ))
-
-// // Sprites
-const alpha = new THREE.TextureLoader().load( './static/images/alpha.png' );
+// Sprites
 const map = new THREE.TextureLoader().load( './static/images/sprite120.png' );
-
 const materials = starTypes.color.map((color) => new THREE.SpriteMaterial( { map: map, color: color } ))
-
-const hazeImage = new THREE.TextureLoader().load( './static/images/feathered60.png' );
-const haze = new THREE.SpriteMaterial( { map: hazeImage, color: 0x0082ff, opacity: OPACITY, depthTest: false, depthWrite: false } )
-
-// Points
-// const geometry = new THREE.BufferGeometry();
-// geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [0,0,0], 1 ) );
-// const materials = starTypes.color.map((color) => new THREE.PointsMaterial( { map: map, alphaMap: alpha, color: color, depthTest: false } ))
 
 export class Star {
 
@@ -65,7 +50,6 @@ export class Star {
 
     updateScale(dist) {
         this.obj.scale.copy(new THREE.Vector3(dist,dist,dist))
-        this.shader.material.opacity = OPACITY * Math.sqrt(dist / 5)
     }
 
     toThreeObject() {
@@ -80,15 +64,9 @@ export class Star {
         star.position.copy(this.position)
         star.name = this.name
 
-        // Shader object
-        let shader = new THREE.Sprite( haze )
-        shader.layers.set(0)
-        shader.scale.multiplyScalar(20.0)
-        star.add(shader)
-
         // store a reference to the 3D object in this object
         this.obj = star
-        this.shader = shader
+        // this.shader = shader
 
         return star
     }

@@ -13,6 +13,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { CopyShader } from './Shader.js'
 import { LuminosityShader } from 'three/addons/shaders/LuminosityShader.js';
 import { fragment, vertex } from "./Shaders.js";
+import { updateHazeScale } from "./Haze.js";
 // import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 const STAR_MIN = 0.25
@@ -157,11 +158,19 @@ async function render() {
 
     // update star scale based on distance to camera
     // TODO: make this function non-linear and clamped
-    galaxy.forEach((star) => {
+    galaxy.stars.forEach((star) => {
         let dist = starTypes.size[star.starType] * star.obj.position.distanceTo(camera.position) / 250
         dist = Math.min(Math.max(STAR_MIN, dist), STAR_MAX)
         star.updateScale(dist)
     })
+
+    galaxy.haze.forEach((haze) => {
+        let dist = haze.position.distanceTo(camera.position) / 250
+        updateHazeScale(haze, dist)
+        haze.material.needsUpdate = true
+    })
+
+    galaxy
 
     // render scene + post-processing
     // set camera to bloom layer
@@ -178,6 +187,6 @@ async function render() {
 }
 
 initThree()
-galaxy = generateGalaxy(scene, 10000)
+galaxy = generateGalaxy(scene, 5000)
 
 requestAnimationFrame(render)
