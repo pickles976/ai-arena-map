@@ -7,8 +7,9 @@
 - [x] Convert stars to sprites
 - [x] Add blue hue
 - [ ] Add Black dust
-- [ ] Figure out a way to draw friendly star systems/enemy star systems
+- [ ] Figure out a way to draw friendly star systems/enemy star systems (draw green and red circles with no opacity on layer 2, then render and add)
 - [ ] Show names and info of closest stars
+- [ ] Add skybox
 
 # Interaction
 - [x] Seedable RNG
@@ -19,19 +20,18 @@
 
 # OOP
 - [x] Create stellar objects with info
+- [x] Star stores three js object reference
 - [ ] Update to TS
-- [ ] Star stores three js uuid reference
 - [ ] Refactor galaxy generation code to store Galaxy object in-memory
 - [ ] Make Galaxy generation code work in node without Three integration
 
 # Server
 - [ ] Create a game server that runs a basic simulation script on the galaxy (dice rolls)
 - [ ] Sync to client via websockets
-- [ ] Persist full galaxy in Redis
+- [ ] Persist full galaxy in Redis (just uuids + game state info)
 - [ ] WS forwarding server
 - [ ] Dockerize
 - [ ] ???
-
 
 1. Create the galaxy with basic interaction and visualization
 2. Make the galaxy seedable
