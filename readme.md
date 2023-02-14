@@ -5,10 +5,10 @@
 - [x] Add size variation to the stars
 - [x] Make the stars grow/shrink with zoom level so they aren't so difficult to navigate
 - [x] Convert stars to sprites
-- [ ] Add sphere of influence visualization around claimed stars
-- [ ] Show names of closest stars
-- [ ] Add blue and black "dust" around the galaxy (shaders?)
-- [ ] Get working with 50k star systems (sprites? optimization) 10k is better for gameplay though
+- [x] Add blue hue
+- [ ] Add Black dust
+- [ ] Figure out a way to draw friendly star systems/enemy star systems
+- [ ] Show names and info of closest stars
 
 # Interaction
 - [x] Seedable RNG
@@ -16,13 +16,13 @@
 - [x] Add raycasts https://threejs.org/docs/#api/en/core/Raycaster
 - [x] Display name on mouseover https://threejs.org/examples/webgl_raycaster_sprite.html
 - [x] Raycasting sucks
-- [ ] Make Galaxy scale 100k?
 
 # OOP
 - [x] Create stellar objects with info
 - [ ] Update to TS
 - [ ] Star stores three js uuid reference
 - [ ] Refactor galaxy generation code to store Galaxy object in-memory
+- [ ] Make Galaxy generation code work in node without Three integration
 
 # Server
 - [ ] Create a game server that runs a basic simulation script on the galaxy (dice rolls)
