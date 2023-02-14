@@ -3,16 +3,19 @@
 - [x] Use gaussians to generate galaxy
 - [x] Add colors to stars
 - [x] Add size variation to the stars
-- [ ] Make the stars grow/shrink with zoom level so they aren't so difficult to navigate
+- [x] Make the stars grow/shrink with zoom level so they aren't so difficult to navigate
+- [x] Convert stars to sprites
 - [ ] Add sphere of influence visualization around claimed stars
+- [ ] Show names of closest stars
 - [ ] Add blue and black "dust" around the galaxy (shaders?)
 - [ ] Get working with 50k star systems (sprites? optimization) 10k is better for gameplay though
 
 # Interaction
 - [x] Seedable RNG
 - [x] Add name generation
-- [ ] Add raycasts https://threejs.org/docs/#api/en/core/Raycaster
-- [ ] Display UUID and name on click
+- [x] Add raycasts https://threejs.org/docs/#api/en/core/Raycaster
+- [x] Display name on mouseover https://threejs.org/examples/webgl_raycaster_sprite.html
+- [x] Raycasting sucks
 - [ ] Make Galaxy scale 100k?
 
 # OOP

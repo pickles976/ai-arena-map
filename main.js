@@ -1,4 +1,5 @@
-import * as THREE from 'three'
+import * as THREE from "three"
+
 import { MapControls } from 'https://unpkg.com/three@0.146.0/examples/jsm/controls/OrbitControls.js'
 import { GUI } from 'https://unpkg.com/three@0.146.0/examples/jsm/libs/lil-gui.module.min.js'
 import { generateGalaxy } from './galaxy.js';
@@ -6,7 +7,16 @@ import { generateGalaxy } from './galaxy.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { uuid } from './util.js';
+import { starTypes } from "./distributions.js";
+
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { CopyShader } from './Shader.js'
+import { LuminosityShader } from 'three/addons/shaders/LuminosityShader.js';
+
+const STAR_MIN = 0.25
+const STAR_MAX = 5.0
+
+// later in your init routine
 
 const params = {
     exposure: 1,
@@ -15,7 +25,7 @@ const params = {
     bloomRadius: 0
 };
 
-let canvas, renderer, camera, scene, orbit, composer, mixer
+let canvas, renderer, camera, scene, orbit, composer, galaxy
 
 function initThree() {
 
@@ -82,9 +92,12 @@ function initThree() {
     bloomPass.strength = params.bloomStrength;
     bloomPass.radius = params.bloomRadius;
 
+    const luminosityPass = new ShaderPass( CopyShader );
+
     composer = new EffectComposer( renderer );
     composer.addPass( renderScene );
-    composer.addPass( bloomPass );
+    // composer.addPass( bloomPass );
+    // composer.addPass( luminosityPass );
 
 }
 
@@ -114,15 +127,24 @@ async function render() {
     const canvas = renderer.domElement;
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
-   
 
     // renderer.render(scene, camera);
 
+    // update star scale based on distance to camera
+    // TODO: make this function non-linear and clamped
+    galaxy.forEach((star) => {
+        let dist = starTypes.size[star.starType] * star.obj.position.distanceTo(camera.position) / 250
+        dist = Math.min(Math.max(STAR_MIN, dist), STAR_MAX)
+        star.updateScale(dist)
+    })
+
+    // render scene + post-processing
     composer.render()
     requestAnimationFrame(render)
 
 }
 
 initThree()
-generateGalaxy(scene, 10000)
+galaxy = generateGalaxy(scene, 10000)
+
 requestAnimationFrame(render)

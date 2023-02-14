@@ -1,6 +1,6 @@
 import { Star } from "./Star.js";
 import { gaussianRandom } from "./util.js";
-import * as THREE from 'three'
+import * as THREE from "three"
 
 const zDist = 15
 const xyDist = 100
@@ -11,7 +11,7 @@ export function generateGalaxy(scene, numStars) {
     let arms = 6
     let stars = []
 
-    // spiral (1/2 the stars total)
+    // spiral (2/3 the stars total)
     for (let j = 0; j < arms; j++) {
         for (let i = 0; i < (numStars / 2) / arms; i++) {
             let pos = spiral(gaussianRandom(200,xyDist), gaussianRandom(100,xyDist / 4), gaussianRandom(0,zDist), j * 2 * Math.PI / arms)
@@ -36,6 +36,8 @@ export function generateGalaxy(scene, numStars) {
         // add star
         scene.add(star.toThreeObject())
     })
+
+    return stars
 }
 
 // modify a Vector3 by some spiral factor
