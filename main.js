@@ -12,20 +12,25 @@ import { starTypes } from "./distributions.js";
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { CopyShader } from './Shader.js'
 import { LuminosityShader } from 'three/addons/shaders/LuminosityShader.js';
+import { fragment, vertex } from "./Shaders.js";
+// import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 const STAR_MIN = 0.25
 const STAR_MAX = 5.0
+
+export const BASE_LAYER = 0
+export const BLOOM_LAYER = 1
 
 // later in your init routine
 
 const params = {
     exposure: 1,
     bloomStrength: 1.5,
-    bloomThreshold: 0,
+    bloomThreshold: 0.4,
     bloomRadius: 0
 };
 
-let canvas, renderer, camera, scene, orbit, composer, galaxy
+let canvas, renderer, camera, scene, orbit, composer, bloomComposer, galaxy
 
 function initThree() {
 
@@ -84,7 +89,6 @@ function initThree() {
     gridHelper.position.set(0, 0, 0.001)
     // scene.add( gridHelper );
 
-    // post-processing
     const renderScene = new RenderPass( scene, camera );
 
     const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
@@ -92,10 +96,31 @@ function initThree() {
     bloomPass.strength = params.bloomStrength;
     bloomPass.radius = params.bloomRadius;
 
-    const luminosityPass = new ShaderPass( CopyShader );
+    // bloom composer
+    bloomComposer = new EffectComposer(renderer)
+    bloomComposer.renderToScreen = false
+    bloomComposer.addPass(renderScene)
+    bloomComposer.addPass(bloomPass)
+
+    // post-processing
+    const finalPass = new ShaderPass(
+        new THREE.ShaderMaterial( {
+            uniforms: {
+                baseTexture: { value: null },
+                bloomTexture: { value: bloomComposer.renderTarget2.texture }
+            },
+            vertexShader: vertex,
+            fragmentShader: fragment,
+            defines: {}
+        } ), 'baseTexture'
+    );
+    finalPass.needsSwap = true;
 
     composer = new EffectComposer( renderer );
     composer.addPass( renderScene );
+    composer.addPass(finalPass)
+
+    // const luminosityPass = new ShaderPass( CopyShader );
     // composer.addPass( bloomPass );
     // composer.addPass( luminosityPass );
 
@@ -139,7 +164,15 @@ async function render() {
     })
 
     // render scene + post-processing
+    // set camera to bloom layer
+    camera.layers.set(BLOOM_LAYER)
+    // render bloom
+    bloomComposer.render()
+    // set camera to normal layer
+    camera.layers.set(BASE_LAYER)
+    // render normal
     composer.render()
+
     requestAnimationFrame(render)
 
 }

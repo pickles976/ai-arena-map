@@ -15,7 +15,7 @@ const map = new THREE.TextureLoader().load( './static/images/sprite120.png' );
 const materials = starTypes.color.map((color) => new THREE.SpriteMaterial( { map: map, color: color } ))
 
 const hazeImage = new THREE.TextureLoader().load( './static/images/feathered60.png' );
-const haze = new THREE.SpriteMaterial( { map: hazeImage, color: 0x0082f0, opacity: OPACITY, depthTest: false, depthWrite: false } )
+const haze = new THREE.SpriteMaterial( { map: hazeImage, color: 0x0082ff, opacity: OPACITY, depthTest: false, depthWrite: false } )
 
 // Points
 // const geometry = new THREE.BufferGeometry();
@@ -74,12 +74,15 @@ export class Star {
 
         let star = new THREE.Sprite( materials[this.starType] );
 
+
+        star.layers.set(1)
         star.scale.multiplyScalar(starTypes.size[this.starType])
         star.position.copy(this.position)
         star.name = this.name
 
         // Shader object
         let shader = new THREE.Sprite( haze )
+        shader.layers.set(0)
         shader.scale.multiplyScalar(20.0)
         star.add(shader)
 
