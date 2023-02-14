@@ -1,19 +1,21 @@
 import * as THREE from 'three'
 import { MapControls } from 'https://unpkg.com/three@0.146.0/examples/jsm/controls/OrbitControls.js'
 import { GUI } from 'https://unpkg.com/three@0.146.0/examples/jsm/libs/lil-gui.module.min.js'
-import { createCluster } from './galaxy.js';
-let canvas, renderer, camera, scene, orbit
+import { generateGalaxy } from './galaxy.js';
 
-function createGround(scene) {
-    
-    const groundMat = new THREE.MeshPhongMaterial({
-        color: 0x00FF11,    // red (can also use a CSS color string here)
-        flatShading: true,
-    });
-    const groundGeo = new THREE.PlaneGeometry(64, 64, 4, 4)
-    const groundMesh = new THREE.Mesh(groundGeo, groundMat)
-    scene.add(groundMesh)
-}
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { uuid } from './util.js';
+
+const params = {
+    exposure: 1,
+    bloomStrength: 1.5,
+    bloomThreshold: 0,
+    bloomRadius: 0
+};
+
+let canvas, renderer, camera, scene, orbit, composer, mixer
 
 function initThree() {
 
@@ -22,9 +24,12 @@ function initThree() {
 
     // renderer
     renderer = new THREE.WebGLRenderer({
+        antialias: true,
         canvas,
         logarithmicDepthBuffer: true,
     });
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.5;
@@ -35,7 +40,7 @@ function initThree() {
 
     // camera
     camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 5, 2000000 );
-    camera.position.set(0, 100, 100);
+    camera.position.set(0, 500, 500);
     camera.up.set(0, 0, 1);
     camera.lookAt(0, 0, 0);
 
@@ -44,7 +49,7 @@ function initThree() {
     orbit.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
     orbit.dampingFactor = 0.05;
     orbit.screenSpacePanning = false;
-    orbit.minDistance = 10;
+    orbit.minDistance = 1;
     orbit.maxDistance = 16384;
     orbit.maxPolarAngle = (Math.PI / 2) - (Math.PI / 360)
 
@@ -68,6 +73,18 @@ function initThree() {
     gridHelper.rotateX(Math.PI / 2)
     gridHelper.position.set(0, 0, 0.001)
     // scene.add( gridHelper );
+
+    // post-processing
+    const renderScene = new RenderPass( scene, camera );
+
+    const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+    bloomPass.threshold = params.bloomThreshold;
+    bloomPass.strength = params.bloomStrength;
+    bloomPass.radius = params.bloomRadius;
+
+    composer = new EffectComposer( renderer );
+    composer.addPass( renderScene );
+    composer.addPass( bloomPass );
 
 }
 
@@ -99,11 +116,13 @@ async function render() {
     camera.updateProjectionMatrix();
    
 
-    renderer.render(scene, camera);
+    // renderer.render(scene, camera);
+
+    composer.render()
     requestAnimationFrame(render)
 
 }
 
 initThree()
-createCluster(scene, 10000)
+generateGalaxy(scene, 10000)
 requestAnimationFrame(render)

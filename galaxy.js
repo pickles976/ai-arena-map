@@ -1,42 +1,41 @@
+import { Star } from "./Star.js";
 import { gaussianRandom } from "./util.js";
 import * as THREE from 'three'
 
-const zDist = 1.5
-const xyDist = 10
+const zDist = 15
+const xyDist = 100
 
 // Create a star cluster
-export function createCluster(scene, size) {
-
-    const geometry = new THREE.SphereGeometry( 0.05, 12, 8 );
-    const material = new THREE.MeshStandardMaterial( { color: 0xFFFFFF, emissive: 0xFFFFFF } );
+export function generateGalaxy(scene, numStars) {
 
     let arms = 6
+    let stars = []
 
-    // spiral
+    // spiral (1/2 the stars total)
     for (let j = 0; j < arms; j++) {
-        for (let i = 0; i < (size / 2) / arms; i++) {
-            let pos = spiral(gaussianRandom(20,xyDist), gaussianRandom(10,xyDist / 4), gaussianRandom(0,zDist), j * 2 * Math.PI / arms)
-            let star = new THREE.Mesh( geometry, material )
-            star.position.copy(pos)
-            scene.add(star)
+        for (let i = 0; i < (numStars / 2) / arms; i++) {
+            let pos = spiral(gaussianRandom(200,xyDist), gaussianRandom(100,xyDist / 4), gaussianRandom(0,zDist), j * 2 * Math.PI / arms)
+            // createStar(scene, pos)
+            stars.push(new Star(pos))
         }
     }
 
-    // outer core
-    for (let i = 0; i < size / 3; i++) {
+    // outer core (1/3rd of the stars)
+    for (let i = 0; i < numStars / 3; i++) {
         let pos = spiral(gaussianRandom(0,xyDist), gaussianRandom(0,xyDist), gaussianRandom(0,zDist), 0)
-        let star = new THREE.Mesh( geometry, material )
-        star.position.copy(pos)
-        scene.add(star)
+        stars.push(new Star(pos))
     }
 
-    // inner core
-    for (let i = 0; i < size / 6; i++) {
+    // inner core (1/6th of the stars)
+    for (let i = 0; i < numStars / 6; i++) {
         let pos = spiral(gaussianRandom(0,xyDist / 3), gaussianRandom(0,xyDist / 3), gaussianRandom(0,zDist), 0)
-        let star = new THREE.Mesh( geometry, material )
-        star.position.copy(pos)
-        scene.add(star)
+        stars.push(new Star(pos))
     }
+
+    stars.forEach((star) => {
+        // add star
+        scene.add(star.toThreeObject())
+    })
 }
 
 // modify a Vector3 by some spiral factor
