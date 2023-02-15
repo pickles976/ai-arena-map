@@ -16,7 +16,7 @@ let params = {
     armYMean: 100,
     spiral: 3, // spiral intensity. 0 -> inf
     arms: 2, // number of arms
-    hazeRatio: 0.5, // ratio of haze particles to stars
+    hazeRatio: 1.0, // ratio of haze particles to stars
 }
 
 const zDist = 5
@@ -88,8 +88,13 @@ function generateStars(scene, numStars, arms) {
     }
 
     stars.forEach((star) => {
+
         // add star
         scene.add(star.toThreeObject())
+
+        if (Math.random() < 0.05) {
+            scene.add(star.addBubble())
+        }
     })
 
     return stars

@@ -14,13 +14,8 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { LuminosityShader } from 'three/addons/shaders/LuminosityShader.js';
 import { fragment, vertex } from "./Shaders.js";
 import { updateHazeScale } from "./Haze.js";
+import { BASE_LAYER, BLOOM_LAYER, OVERLAY_LAYER } from "./config.js";
 // import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-
-const STAR_MIN = 0.25
-const STAR_MAX = 5.0
-
-export const BASE_LAYER = 0
-export const BLOOM_LAYER = 1
 
 // later in your init routine
 
@@ -31,7 +26,7 @@ const params = {
     bloomRadius: 0
 };
 
-let canvas, renderer, camera, scene, orbit, composer, bloomComposer, galaxy
+let canvas, renderer, camera, scene, orbit, composer, bloomComposer, overlayComposer, galaxy
 
 function initThree() {
 
@@ -103,12 +98,18 @@ function initThree() {
     bloomComposer.addPass(renderScene)
     bloomComposer.addPass(bloomPass)
 
+    // overlay composer
+    overlayComposer = new EffectComposer(renderer)
+    overlayComposer.renderToScreen = false
+    overlayComposer.addPass(renderScene)
+
     // post-processing
     const finalPass = new ShaderPass(
         new THREE.ShaderMaterial( {
             uniforms: {
                 baseTexture: { value: null },
-                bloomTexture: { value: bloomComposer.renderTarget2.texture }
+                bloomTexture: { value: bloomComposer.renderTarget2.texture },
+                overlayTexture: { value: overlayComposer.renderTarget2.texture }
             },
             vertexShader: vertex,
             fragmentShader: fragment,
@@ -159,8 +160,7 @@ async function render() {
     // update star scale based on distance to camera
     // TODO: make this function non-linear and clamped
     galaxy.stars.forEach((star) => {
-        let dist = starTypes.size[star.starType] * star.obj.position.distanceTo(camera.position) / 250
-        dist = Math.min(Math.max(STAR_MIN, dist), STAR_MAX)
+        let dist = star.obj.position.distanceTo(camera.position) / 250
         star.updateScale(dist)
     })
 
@@ -172,14 +172,16 @@ async function render() {
 
     galaxy
 
-    // render scene + post-processing
-    // set camera to bloom layer
+    // Render bloom
     camera.layers.set(BLOOM_LAYER)
-    // render bloom
     bloomComposer.render()
-    // set camera to normal layer
+
+    // Render overlays
+    camera.layers.set(OVERLAY_LAYER)
+    overlayComposer.render()
+
+    // Render normal
     camera.layers.set(BASE_LAYER)
-    // render normal
     composer.render()
 
     requestAnimationFrame(render)
