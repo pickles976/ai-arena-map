@@ -3,271 +3,115 @@
 import * as THREE from 'three';
 
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { Sky } from 'three/addons/objects/Sky.js';
 
-const ENTIRE_SCENE = 0, BLOOM_SCENE = 1;
+let camera, scene, renderer;
 
-const bloomLayer = new THREE.Layers();
-bloomLayer.set( BLOOM_SCENE );
+let sky, sun;
 
-const params = {
-    exposure: 1,
-    bloomStrength: 5,
-    bloomThreshold: 0,
-    bloomRadius: 0,
-    scene: 'Scene with Glow'
-};
+init();
+render();
 
-const darkMaterial = new THREE.MeshBasicMaterial( { color: 'black' } );
-const materials = {};
+function initSky() {
 
-const renderer = new THREE.WebGLRenderer( { antialias: true } );
-renderer.setPixelRatio( window.devicePixelRatio );
-renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.toneMapping = THREE.ReinhardToneMapping;
-document.body.appendChild( renderer.domElement );
+    // Add Sky
+    sky = new Sky();
+    sky.scale.setScalar( 450000 );
+    scene.add( sky );
 
-const scene = new THREE.Scene();
+    sun = new THREE.Vector3();
 
-const camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 200 );
-camera.position.set( 0, 0, 20 );
-camera.lookAt( 0, 0, 0 );
+    /// GUI
 
-const controls = new OrbitControls( camera, renderer.domElement );
-controls.maxPolarAngle = Math.PI * 0.5;
-controls.minDistance = 1;
-controls.maxDistance = 100;
-controls.addEventListener( 'change', render );
+    const effectController = {
+        turbidity: 10,
+        rayleigh: 3,
+        mieCoefficient: 0.005,
+        mieDirectionalG: 0.7,
+        elevation: 2,
+        azimuth: 180,
+        exposure: renderer.toneMappingExposure
+    };
 
-scene.add( new THREE.AmbientLight( 0x404040 ) );
+    function guiChanged() {
 
-const renderScene = new RenderPass( scene, camera );
+        const uniforms = sky.material.uniforms;
+        uniforms[ 'turbidity' ].value = effectController.turbidity;
+        uniforms[ 'rayleigh' ].value = effectController.rayleigh;
+        uniforms[ 'mieCoefficient' ].value = effectController.mieCoefficient;
+        uniforms[ 'mieDirectionalG' ].value = effectController.mieDirectionalG;
 
-const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-bloomPass.threshold = params.bloomThreshold;
-bloomPass.strength = params.bloomStrength;
-bloomPass.radius = params.bloomRadius;
+        const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation );
+        const theta = THREE.MathUtils.degToRad( effectController.azimuth );
 
-const bloomComposer = new EffectComposer( renderer );
-bloomComposer.renderToScreen = false;
-bloomComposer.addPass( renderScene );
-bloomComposer.addPass( bloomPass );
+        sun.setFromSphericalCoords( 1, phi, theta );
 
-const finalPass = new ShaderPass(
-    new THREE.ShaderMaterial( {
-        uniforms: {
-            baseTexture: { value: null },
-            bloomTexture: { value: bloomComposer.renderTarget2.texture }
-        },
-        vertexShader: document.getElementById( 'vertexshader' ).textContent,
-        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
-        defines: {}
-    } ), 'baseTexture'
-);
-finalPass.needsSwap = true;
+        uniforms[ 'sunPosition' ].value.copy( sun );
 
-const finalComposer = new EffectComposer( renderer );
-finalComposer.addPass( renderScene );
-finalComposer.addPass( finalPass );
-
-const raycaster = new THREE.Raycaster();
-
-const mouse = new THREE.Vector2();
-
-window.addEventListener( 'pointerdown', onPointerDown );
-
-const gui = new GUI();
-
-gui.add( params, 'scene', [ 'Scene with Glow', 'Glow only', 'Scene only' ] ).onChange( function ( value ) {
-
-    switch ( value ) 	{
-
-        case 'Scene with Glow':
-            bloomComposer.renderToScreen = false;
-            break;
-        case 'Glow only':
-            bloomComposer.renderToScreen = true;
-            break;
-        case 'Scene only':
-            // nothing to do
-            break;
+        renderer.toneMappingExposure = effectController.exposure;
+        renderer.render( scene, camera );
 
     }
 
-    render();
+    const gui = new GUI();
 
-} );
+    gui.add( effectController, 'turbidity', 0.0, 20.0, 0.1 ).onChange( guiChanged );
+    gui.add( effectController, 'rayleigh', 0.0, 4, 0.001 ).onChange( guiChanged );
+    gui.add( effectController, 'mieCoefficient', 0.0, 0.1, 0.001 ).onChange( guiChanged );
+    gui.add( effectController, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( guiChanged );
+    gui.add( effectController, 'elevation', 0, 90, 0.1 ).onChange( guiChanged );
+    gui.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
+    gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
 
-const folder = gui.addFolder( 'Bloom Parameters' );
-
-folder.add( params, 'exposure', 0.1, 2 ).onChange( function ( value ) {
-
-    renderer.toneMappingExposure = Math.pow( value, 4.0 );
-    render();
-
-} );
-
-folder.add( params, 'bloomThreshold', 0.0, 1.0 ).onChange( function ( value ) {
-
-    bloomPass.threshold = Number( value );
-    render();
-
-} );
-
-folder.add( params, 'bloomStrength', 0.0, 10.0 ).onChange( function ( value ) {
-
-    bloomPass.strength = Number( value );
-    render();
-
-} );
-
-folder.add( params, 'bloomRadius', 0.0, 1.0 ).step( 0.01 ).onChange( function ( value ) {
-
-    bloomPass.radius = Number( value );
-    render();
-
-} );
-
-setupScene();
-
-function onPointerDown( event ) {
-
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-    raycaster.setFromCamera( mouse, camera );
-    const intersects = raycaster.intersectObjects( scene.children, false );
-    if ( intersects.length > 0 ) {
-
-        const object = intersects[ 0 ].object;
-        object.layers.toggle( BLOOM_SCENE );
-        render();
-
-    }
+    guiChanged();
 
 }
 
-window.onresize = function () {
+function init() {
 
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 100, 2000000 );
+    camera.position.set( 0, 100, 2000 );
 
-    camera.aspect = width / height;
+    scene = new THREE.Scene();
+
+    const helper = new THREE.GridHelper( 10000, 2, 0xffffff, 0xffffff );
+    scene.add( helper );
+
+    renderer = new THREE.WebGLRenderer();
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.5;
+    document.body.appendChild( renderer.domElement );
+
+    const controls = new OrbitControls( camera, renderer.domElement );
+    controls.addEventListener( 'change', render );
+    //controls.maxPolarAngle = Math.PI / 2;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+
+    initSky();
+
+    window.addEventListener( 'resize', onWindowResize );
+
+}
+
+function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
-    renderer.setSize( width, height );
-
-    bloomComposer.setSize( width, height );
-    finalComposer.setSize( width, height );
+    renderer.setSize( window.innerWidth, window.innerHeight );
 
     render();
-
-};
-
-function setupScene() {
-
-    scene.traverse( disposeMaterial );
-    scene.children.length = 0;
-
-    const geometry = new THREE.IcosahedronGeometry( 1, 15 );
-
-    for ( let i = 0; i < 50; i ++ ) {
-
-        const color = new THREE.Color();
-        color.setHSL( Math.random(), 0.7, Math.random() * 0.2 + 0.05 );
-
-        const material = new THREE.MeshBasicMaterial( { color: color } );
-        const sphere = new THREE.Mesh( geometry, material );
-        sphere.position.x = Math.random() * 10 - 5;
-        sphere.position.y = Math.random() * 10 - 5;
-        sphere.position.z = Math.random() * 10 - 5;
-        sphere.position.normalize().multiplyScalar( Math.random() * 4.0 + 2.0 );
-        sphere.scale.setScalar( Math.random() * Math.random() + 0.5 );
-        scene.add( sphere );
-
-        if ( Math.random() < 0.25 ) sphere.layers.enable( BLOOM_SCENE );
-
-    }
-
-    render();
-
-}
-
-function disposeMaterial( obj ) {
-
-    if ( obj.material ) {
-
-        obj.material.dispose();
-
-    }
 
 }
 
 function render() {
 
-    switch ( params.scene ) {
-
-        case 'Scene only':
-            renderer.render( scene, camera );
-            break;
-        case 'Glow only':
-            renderBloom( false );
-            break;
-        case 'Scene with Glow':
-        default:
-            // render scene with bloom
-            renderBloom( true );
-
-            // render the entire scene, then render bloom scene on top
-            finalComposer.render();
-            break;
-
-    }
-
-}
-
-function renderBloom( mask ) {
-
-    if ( mask === true ) {
-
-        scene.traverse( darkenNonBloomed );
-        bloomComposer.render();
-        scene.traverse( restoreMaterial );
-
-    } else {
-
-        camera.layers.set( BLOOM_SCENE );
-        bloomComposer.render();
-        camera.layers.set( ENTIRE_SCENE );
-
-    }
-
-}
-
-function darkenNonBloomed( obj ) {
-
-    if ( obj.isMesh && bloomLayer.test( obj.layers ) === false ) {
-
-        materials[ obj.uuid ] = obj.material;
-        obj.material = darkMaterial;
-
-    }
-
-}
-
-function restoreMaterial( obj ) {
-
-    if ( materials[ obj.uuid ] ) {
-
-        obj.material = materials[ obj.uuid ];
-        delete materials[ obj.uuid ];
-
-    }
+    renderer.render( scene, camera );
 
 }
 

@@ -9,7 +9,8 @@
 - [x] Figure out a way to draw friendly star systems/enemy star systems (draw green and red circles with no opacity on layer 2, then render and add)
 - [x] Show names and info of closest stars
 - [x] Scale name based on distance
-- [ ] Add skybox w/ shader
+- [x] Add skybox w/ shader
+- [ ] Make skybox look better
 
 # Bugs
 - [x] Center text better

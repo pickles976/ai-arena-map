@@ -12,6 +12,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { fragment, vertex } from "./js/shaders/CompositionShader.js";
 import { updateHazeScale } from "./js/objects/Haze.js";
 import { BASE_LAYER, BLOOM_LAYER, OVERLAY_LAYER } from "./js/config/config.js";
+import { Universe } from './js/objects/Universe.js';
 
 // later in your init routine
 const params = {
@@ -21,7 +22,7 @@ const params = {
     bloomRadius: 0
 };
 
-let canvas, renderer, camera, scene, orbit, composer, bloomComposer, overlayComposer, galaxy
+let canvas, renderer, camera, scene, orbit, composer, bloomComposer, overlayComposer, galaxy, skybox
 
 function initThree() {
 
@@ -187,7 +188,18 @@ async function render() {
 
 }
 
+function initSkybox() {
+
+    // Add Sky
+    skybox = new Universe();
+    skybox.layers.set(BASE_LAYER)
+    skybox.scale.setScalar( 450000 );
+    scene.add( skybox );
+
+}
+
 initThree()
+initSkybox()
 
 galaxy = generateGalaxy(scene, 5000)
 
