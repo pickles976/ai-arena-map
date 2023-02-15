@@ -10,7 +10,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { starTypes } from "./distributions.js";
 
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { CopyShader } from './Shader.js'
+// import { CopyShader } from './Shader.js'
 import { LuminosityShader } from 'three/addons/shaders/LuminosityShader.js';
 import { fragment, vertex } from "./Shaders.js";
 import { updateHazeScale } from "./Haze.js";
