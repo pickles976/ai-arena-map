@@ -2,16 +2,16 @@ import * as THREE from 'three'
 
 import { MapControls } from 'three/addons/controls/OrbitControls.js'
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
-import { generateGalaxy } from './galaxy.js';
+import { generateGalaxy } from './js/objects/Galaxy.js';
 
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { fragment, vertex } from "./Shaders.js";
-import { updateHazeScale } from "./Haze.js";
-import { BASE_LAYER, BLOOM_LAYER, OVERLAY_LAYER } from "./config.js";
+import { fragment, vertex } from "./js/shaders/CompositionShader.js";
+import { updateHazeScale } from "./js/objects/Haze.js";
+import { BASE_LAYER, BLOOM_LAYER, OVERLAY_LAYER } from "./js/config/config.js";
 
 // later in your init routine
 const params = {

@@ -1,3 +1,7 @@
+/**
+ * Shader used for combining the multiple render passes
+ */
+
 export const fragment = `
 
 uniform sampler2D baseTexture;

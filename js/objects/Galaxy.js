@@ -1,6 +1,6 @@
 import { createHaze } from "./Haze.js";
 import { Star } from "./Star.js";
-import { gaussianRandom } from "./util.js";
+import { gaussianRandom } from "../../util.js";
 import * as THREE from "three"
 
 // control the parameters of the galaxy generation

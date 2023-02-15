@@ -1,6 +1,6 @@
 import * as THREE from "three"
-import { BASE_LAYER } from "./config.js";
-import { clamp } from "./util.js";
+import { BASE_LAYER } from "../config/config.js";
+import { clamp } from "../../util.js";
 
 const OPACITY = 0.2
 const MAX_SIZE = 50.0

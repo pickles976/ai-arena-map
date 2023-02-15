@@ -1,9 +1,9 @@
 import * as THREE from "three"
-import { postfixes, prefixes, starTypes } from "./distributions.js"
-import { getRandomItem, uuid } from "./util.js";
-import {words} from "./words.js"
-import { BLOOM_LAYER, BUBBLE_MAX, BUBBLE_MIN, FAR_TEXT_PLANE, NEAR_TEXT_PLANE, OVERLAY_LAYER, STAR_MAX, STAR_MIN } from "./config.js";
-import { createText, updateText } from "./text.js";
+import { postfixes, prefixes, starTypes } from "../config/distributions.js"
+import { getRandomItem, uuid } from "../../util.js";
+import {words} from "../config/words.js"
+import { BLOOM_LAYER, BUBBLE_MAX, BUBBLE_MIN, FAR_TEXT_PLANE, NEAR_TEXT_PLANE, OVERLAY_LAYER, STAR_MAX, STAR_MIN } from "../config/config.js";
+import { createText, updateText } from "./Text.js";
 
 // Sprites
 const map = new THREE.TextureLoader().load( './static/images/sprite120.png' );
