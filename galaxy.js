@@ -92,9 +92,9 @@ function generateStars(scene, numStars, arms) {
         // add star
         scene.add(star.toThreeObject())
 
-        if (Math.random() < 0.05) {
-            scene.add(star.addBubble())
-        }
+        // if (Math.random() < 0.05) {
+        //     scene.add(star.addBubble())
+        // }
     })
 
     return stars

@@ -6,10 +6,15 @@
 - [x] Make the stars grow/shrink with zoom level so they aren't so difficult to navigate
 - [x] Convert stars to sprites
 - [x] Add blue hue
-- [ ] Add Black dust
-- [ ] Figure out a way to draw friendly star systems/enemy star systems (draw green and red circles with no opacity on layer 2, then render and add)
-- [ ] Show names and info of closest stars
-- [ ] Add skybox
+- [x] Figure out a way to draw friendly star systems/enemy star systems (draw green and red circles with no opacity on layer 2, then render and add)
+- [x] Show names and info of closest stars
+- [x] Scale name based on distance
+- [ ] Add skybox w/ shader
+
+# Bugs
+- [x] Center text better
+- [x] Add some sort of frustum-based text drawing so it doesn't feel as awkward (dont render stuff on periphery?)
+- [x] Only render stars that are ON SCREEN
 
 # Interaction
 - [x] Seedable RNG
@@ -21,9 +26,11 @@
 # OOP
 - [x] Create stellar objects with info
 - [x] Star stores three js object reference
+- [ ] Generate galaxy data structure 
+- [ ] Generate galaxy three js visualization from params and data structure
+- [ ] Make three js visualization updatable from diffs
 - [ ] Update to TS
-- [ ] Refactor galaxy generation code to store Galaxy object in-memory
-- [ ] Make Galaxy generation code work in node without Three integration
+- [ ] Use npm package w/ bundler?
 
 # Server
 - [ ] Create a game server that runs a basic simulation script on the galaxy (dice rolls)

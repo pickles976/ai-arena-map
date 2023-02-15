@@ -1,67 +1,58 @@
 import * as THREE from 'three'
-import { FontLoader } from 'https://unpkg.com/three@0.146.0/examples/jsm/loaders/FontLoader.js'
-import { TextGeometry } from 'https://unpkg.com/three@0.146.0/examples/jsm/geometries/TextGeometry.js'
 
-const TEXT_SIZE = 25
+let width = 100
+let height = 100
+let drawRadius = window.innerWidth / 3.5
 
-const loader = new FontLoader();
-
-let meshes = []
-
-const meshMaterial = new THREE.MeshStandardMaterial ({
-    color: 0xffffff,
-    flatShading: true,
-    roughness: 0,
-    metalness: 0,
-    // emissive: 0xffffff,
-    // emissiveIntensity: 5.0,
-})
-
-export function CreateText(text, position, scene) {
-
-    meshes.forEach((mesh) => scene.remove(mesh))
-    meshes = []
-
-    _DrawText({
-        text,
-        scene,
-        position: position,
-        size: TEXT_SIZE,
-        height:  0,
-    })
-
+// Create the text element object
+export function createText(data) {
+    var text = document.createElement('div');
+    text.style.position = 'absolute';
+    text.style.width = 100;
+    text.style.height = 100;
+    text.style.color = "white"
+    text.innerHTML = data;
+    text.style.top = 200 + 'px';
+    text.style.left = 200 + 'px';
+    text.style.fontFamily = "helvetica"
+    text.style.pointerEvents = "none"
+    document.body.appendChild(text);
+    return text
 }
 
-export function UpdateText(position){
-    meshes.forEach((mesh) => mesh.lookAt(position))
+// update text position in browser based on camera projection from three
+export function updateText(textObj, dist, position, camera, frustum) {
+
+    if (!frustum.containsPoint(position)) { 
+        textObj.style.display ="none"
+        return 
+    }
+
+    let vec = toXYCoords(position, camera)
+
+    let x = vec.x + width
+    let y = vec.y + height
+
+    // dont draw text in the periphery. It's annoying.
+    let radius = new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+    radius = radius.distanceTo(vec)
+
+    // Keep text within these bounds
+    if (radius < drawRadius && x + width > 0 && x < window.innerWidth && y > 0 && y < window.innerHeight) {
+        textObj.style.top = `${vec.y}px`
+        textObj.style.left = `${vec.x}px`
+        let scale = 0.1 / dist
+        textObj.style.transform = `scale(${scale}) translate(-${50 / scale}%, -${50 + (100 * Math.sqrt(scale / 2))}%)`
+        textObj.style.display ="block"
+    } else {
+        textObj.style.display ="none"
+    }
 }
 
-function _DrawText(params){
-
-    loader
-        .setPath('./static/fonts/')
-        .load('helvetiker_regular.typeface.json', (font) => {
-            const geometry = new TextGeometry(params.text ?? "ERROR: TEXT NOT FOUND", 
-                {
-                    font: font,
-                    size: params.size ?? 3,  // ui: size
-                    height: params.height ?? 0.2,  // ui: height
-                    curveSegments: params.curveSegments ?? 12,  // ui: curveSegments
-                    bevelEnabled: params.bevelEnabled ?? false,  // ui: bevelEnabled
-                    bevelThickness: params.bevelThickness ?? 0.15,  // ui: bevelThickness
-                    bevelSize: params.bevelSize ?? 0.3,  // ui: bevelSize
-                    bevelSegments: params.bevelSegments ?? 5,  // ui: bevelSegments
-                })
-
-            // geometry.rotateY(-Math.PI / 2)
-            // geometry.rotateZ(Math.PI)
-            // geometry.rotateZ(Math.PI)
-            geometry.center()
-
-            let temp = new THREE.Mesh(geometry, meshMaterial)
-            temp.position.set(...params.position)
-            meshes.push(temp)
-            params.scene.add(temp)
-        }
-      )
+// 3D position to screen space
+function toXYCoords (pos, camera) {
+    let vector = pos.clone().project(camera)
+    vector.x = (vector.x + 1)/2 * window.innerWidth;
+    vector.y = -(vector.y - 1)/2 * window.innerHeight;
+    return vector;
 }

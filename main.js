@@ -1,24 +1,19 @@
-import * as THREE from "three"
+import * as THREE from 'three'
 
-import { MapControls } from 'https://unpkg.com/three@0.146.0/examples/jsm/controls/OrbitControls.js'
-import { GUI } from 'https://unpkg.com/three@0.146.0/examples/jsm/libs/lil-gui.module.min.js'
+import { MapControls } from 'three/addons/controls/OrbitControls.js'
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
 import { generateGalaxy } from './galaxy.js';
 
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { starTypes } from "./distributions.js";
 
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-// import { CopyShader } from './Shader.js'
-import { LuminosityShader } from 'three/addons/shaders/LuminosityShader.js';
 import { fragment, vertex } from "./Shaders.js";
 import { updateHazeScale } from "./Haze.js";
 import { BASE_LAYER, BLOOM_LAYER, OVERLAY_LAYER } from "./config.js";
-// import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 // later in your init routine
-
 const params = {
     exposure: 1,
     bloomStrength: 1.5,
@@ -157,20 +152,24 @@ async function render() {
 
     // renderer.render(scene, camera);
 
+    // necessary for frustum-culling text
+    // we do this here so we can only do it once
+    camera.updateMatrixWorld()
+    let frustum = new THREE.Frustum();
+    frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse))
+
     // update star scale based on distance to camera
-    // TODO: make this function non-linear and clamped
     galaxy.stars.forEach((star) => {
-        let dist = star.obj.position.distanceTo(camera.position) / 250
-        star.updateScale(dist)
+        // let dist = star.obj.position.distanceTo(camera.position) / 250
+        star.updateScale(camera, frustum)
     })
+
 
     galaxy.haze.forEach((haze) => {
         let dist = haze.position.distanceTo(camera.position) / 250
         updateHazeScale(haze, dist)
         haze.material.needsUpdate = true
     })
-
-    galaxy
 
     // Render bloom
     camera.layers.set(BLOOM_LAYER)
@@ -189,6 +188,7 @@ async function render() {
 }
 
 initThree()
+
 galaxy = generateGalaxy(scene, 5000)
 
 requestAnimationFrame(render)

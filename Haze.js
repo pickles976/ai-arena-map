@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import { BASE_LAYER } from "./config.js";
+import { clamp } from "./util.js";
 
 const OPACITY = 0.2
 const MAX_SIZE = 50.0
@@ -13,10 +14,10 @@ export function createHaze(position) {
     let haze = new THREE.Sprite( hazeSprite )
     haze.layers.set(BASE_LAYER)
     haze.position.copy(position)
-    haze.scale.multiplyScalar(Math.min(MAX_SIZE, Math.max(MIN_SIZE, 50.0 * Math.random())))
+    haze.scale.multiplyScalar(clamp(MAX_SIZE * Math.random(), MIN_SIZE, MAX_SIZE))
     return haze
 }
 
 export function updateHazeScale(obj, dist) {
-    obj.material.opacity = OPACITY * Math.pow(dist / 2.5, 2)
+    obj.material.opacity = clamp(OPACITY * Math.pow(dist / 2.5, 2), 0, OPACITY)
 }
