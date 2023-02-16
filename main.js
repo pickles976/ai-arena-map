@@ -46,7 +46,7 @@ function initThree() {
     scene.fog = new THREE.FogExp2(0xEBE2DB, 0.00003);
 
     // camera
-    camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 2000000 );
+    camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 5000000 );
     camera.position.set(0, 500, 500);
     camera.up.set(0, 0, 1);
     camera.lookAt(0, 0, 0);
@@ -193,7 +193,8 @@ function initSkybox() {
     // Add Sky
     skybox = new Universe();
     skybox.layers.set(BASE_LAYER)
-    skybox.scale.setScalar( 450000 );
+    skybox.scale.setScalar( 2000000 );
+
     scene.add( skybox );
 
 }

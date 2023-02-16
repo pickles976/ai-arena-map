@@ -68,8 +68,8 @@ Universe.CosmosShader = {
         #define volsteps 20
         #define stepsize 0.1
 
-        #define zoom   0.800
-        #define tile   0.850
+        #define zoom   0.8
+        #define tile   0.9
         #define speed  0.010 
 
         #define brightness 0.0015
@@ -110,7 +110,7 @@ Universe.CosmosShader = {
             v=mix(vec3(length(v)),v,saturation); //color adjust
 
             // Clamp max value to minimize star popping
-            gl_FragColor = vec4(min(v*.001, 0.3),1.);	
+            gl_FragColor = vec4(min(v*.00035, 0.3),1.0);	
 		}`
 
 };
