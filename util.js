@@ -7,7 +7,7 @@ export function gaussianRandom(mean=0, stdev=1) {
 }
 
 export function uuid() {
-    let length = 36
+    let length = 18
     let id = ""
     for (let i = 0; i < length; i++) {
         let num = Math.floor(Math.random() * 36)

@@ -2,7 +2,7 @@ import * as THREE from 'three'
 
 import { MapControls } from 'three/addons/controls/OrbitControls.js'
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
-import { generateGalaxy } from './js/objects/Galaxy.js';
+import { Galaxy, Galaxy3D } from './js/objects/Galaxy.js';
 
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -11,35 +11,15 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { fragment, vertex } from "./js/shaders/CompositionShader.js";
 import { updateHazeScale } from "./js/objects/Haze.js";
-import { BASE_LAYER, BLOOM_LAYER, OVERLAY_LAYER } from "./js/config/config.js";
+import { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER } from "./js/config/config.js";
 import { Universe } from './js/objects/Universe.js';
 
-// later in your init routine
-const params = {
-    exposure: 1,
-    bloomStrength: 1.5,
-    bloomThreshold: 0.4,
-    bloomRadius: 0
-};
-
-let canvas, renderer, camera, scene, orbit, composer, bloomComposer, overlayComposer, galaxy, skybox
+let canvas, renderer, camera, scene, orbit, baseComposer, bloomComposer, overlayComposer, galaxy, galaxy3D, skybox
 
 function initThree() {
 
     // grab canvas
     canvas = document.querySelector('#canvas');
-
-    // renderer
-    renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        canvas,
-        logarithmicDepthBuffer: true,
-    });
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.5;
 
     // scene
     scene = new THREE.Scene();
@@ -60,33 +40,32 @@ function initThree() {
     orbit.maxDistance = 16384;
     orbit.maxPolarAngle = (Math.PI / 2) - (Math.PI / 360)
 
-    // lighting
-    const color = 0xFFFFFF;
-    const intensity = 0.6;
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(-1, 2, 4);
-    scene.add(light);
+    initRenderPipeline()
 
-    const ambient = new THREE.AmbientLight(color, 0.3);
-    scene.add(ambient);
+}
 
-    const axesHelper = new THREE.AxesHelper( 10 );
-    axesHelper.position.set(0, 0, 0.003)
-    scene.add( axesHelper );
+function initRenderPipeline() {
 
-    // Grid Helper
-    const size = 64
-    const gridHelper = new THREE.GridHelper( size, size / 4, 0x444444, 0x999999);
-    gridHelper.rotateX(Math.PI / 2)
-    gridHelper.position.set(0, 0, 0.001)
-    // scene.add( gridHelper );
+    // Assign Renderer
+    renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        canvas,
+        logarithmicDepthBuffer: true,
+    })
+    renderer.setPixelRatio( window.devicePixelRatio )
+    renderer.setSize( window.innerWidth, window.innerHeight )
+    renderer.outputEncoding = THREE.sRGBEncoding
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.toneMappingExposure = 0.5
 
-    const renderScene = new RenderPass( scene, camera );
+    // General-use rendering pass for chaining
+    const renderScene = new RenderPass( scene, camera )
 
-    const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-    bloomPass.threshold = params.bloomThreshold;
-    bloomPass.strength = params.bloomStrength;
-    bloomPass.radius = params.bloomRadius;
+    // Rendering pass for bloom
+    const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 )
+    bloomPass.threshold = BLOOM_PARAMS.bloomThreshold
+    bloomPass.strength = BLOOM_PARAMS.bloomStrength
+    bloomPass.radius = BLOOM_PARAMS.bloomRadius
 
     // bloom composer
     bloomComposer = new EffectComposer(renderer)
@@ -99,7 +78,7 @@ function initThree() {
     overlayComposer.renderToScreen = false
     overlayComposer.addPass(renderScene)
 
-    // post-processing
+    // Shader pass to combine base layer, bloom, and overlay layers
     const finalPass = new ShaderPass(
         new THREE.ShaderMaterial( {
             uniforms: {
@@ -114,14 +93,10 @@ function initThree() {
     );
     finalPass.needsSwap = true;
 
-    composer = new EffectComposer( renderer );
-    composer.addPass( renderScene );
-    composer.addPass(finalPass)
-
-    // const luminosityPass = new ShaderPass( CopyShader );
-    // composer.addPass( bloomPass );
-    // composer.addPass( luminosityPass );
-
+    // base layer composer
+    baseComposer = new EffectComposer( renderer )
+    baseComposer.addPass( renderScene )
+    baseComposer.addPass(finalPass)
 }
 
 function resizeRendererToDisplaySize(renderer) {
@@ -151,26 +126,17 @@ async function render() {
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
 
-    // renderer.render(scene, camera);
+    // Update galaxy scale/opacity and whatnot from zoom
+    galaxy3D.updateFromZoom(camera)
 
-    // necessary for frustum-culling text
-    // we do this here so we can only do it once
-    camera.updateMatrixWorld()
-    let frustum = new THREE.Frustum();
-    frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse))
+    // Run each pass of the render pipeline
+    renderPipeline()
 
-    // update star scale based on distance to camera
-    galaxy.stars.forEach((star) => {
-        // let dist = star.obj.position.distanceTo(camera.position) / 250
-        star.updateScale(camera, frustum)
-    })
+    requestAnimationFrame(render)
 
+}
 
-    galaxy.haze.forEach((haze) => {
-        let dist = haze.position.distanceTo(camera.position) / 250
-        updateHazeScale(haze, dist)
-        haze.material.needsUpdate = true
-    })
+function renderPipeline() {
 
     // Render bloom
     camera.layers.set(BLOOM_LAYER)
@@ -182,9 +148,7 @@ async function render() {
 
     // Render normal
     camera.layers.set(BASE_LAYER)
-    composer.render()
-
-    requestAnimationFrame(render)
+    baseComposer.render()
 
 }
 
@@ -202,6 +166,7 @@ function initSkybox() {
 initThree()
 initSkybox()
 
-galaxy = generateGalaxy(scene, 5000)
+galaxy = new Galaxy(GALAXY_PARAMS)
+galaxy3D = new Galaxy3D(scene, galaxy)
 
 requestAnimationFrame(render)

@@ -10,7 +10,7 @@
 - [x] Show names and info of closest stars
 - [x] Scale name based on distance
 - [x] Add skybox w/ shader
-- [ ] Make skybox look better
+- [x] Make skybox look better
 
 # Bugs
 - [x] Center text better
@@ -24,12 +24,16 @@
 - [x] Display name on mouseover https://threejs.org/examples/webgl_raycaster_sprite.html
 - [x] Raycasting sucks
 
-# OOP
+# Cleanup
 - [x] Create stellar objects with info
 - [x] Star stores three js object reference
-- [ ] Generate galaxy data structure 
-- [ ] Generate galaxy three js visualization from params and data structure
+- [x] Break out rendering pipeline logic
+- [ ] Consolidate parameters/config
+
+- [x] Generate galaxy data structure 
+- [x] Generate galaxy three js visualization from params and data structure
 - [ ] Make three js visualization updatable from diffs
+
 - [ ] Update to TS
 - [ ] Use npm package w/ bundler?
 
@@ -59,3 +63,5 @@ then for your turn, territory (the map) is updated
 
 This repeats for each player until all turns are completed and the next round can begin
 Each turn is 10,000 solar years.
+
+https://blogg.bekk.no/procedural-planet-in-webgl-and-three-js-fc77f14f5505

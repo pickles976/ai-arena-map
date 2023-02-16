@@ -1,5 +1,8 @@
 /**
  * Shader used for combining the multiple render passes
+ * 
+ * Basically we set render target screen to false for our effects passes, so they render to a texture. Then for each pixel
+ * we blend the layers together.
  */
 
 export const fragment = `
