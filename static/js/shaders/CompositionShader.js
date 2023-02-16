@@ -1,10 +1,9 @@
 /**
  * Shader used for combining the multiple render passes
- * 
+ *
  * Basically we set render target screen to false for our effects passes, so they render to a texture. Then for each pixel
  * we blend the layers together.
  */
-
 export const fragment = `
 
 uniform sampler2D baseTexture;
@@ -20,8 +19,7 @@ void main() {
 
 }
 
-`
-
+`;
 export const vertex = `
 varying vec2 vUv;
 
@@ -32,4 +30,4 @@ void main() {
     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 
 }
-`
+`;

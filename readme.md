@@ -1,43 +1,8 @@
-# Visual
-- [x] 3D gaussian distribution function
-- [x] Use gaussians to generate galaxy
-- [x] Add colors to stars
-- [x] Add size variation to the stars
-- [x] Make the stars grow/shrink with zoom level so they aren't so difficult to navigate
-- [x] Convert stars to sprites
-- [x] Add blue hue
-- [x] Figure out a way to draw friendly star systems/enemy star systems (draw green and red circles with no opacity on layer 2, then render and add)
-- [x] Show names and info of closest stars
-- [x] Scale name based on distance
-- [x] Add skybox w/ shader
-- [x] Make skybox look better
-
-# Bugs
-- [x] Center text better
-- [x] Add some sort of frustum-based text drawing so it doesn't feel as awkward (dont render stuff on periphery?)
-- [x] Only render stars that are ON SCREEN
-
-# Interaction
-- [x] Seedable RNG
-- [x] Add name generation
-- [x] Add raycasts https://threejs.org/docs/#api/en/core/Raycaster
-- [x] Display name on mouseover https://threejs.org/examples/webgl_raycaster_sprite.html
-- [x] Raycasting sucks
-
 # Cleanup
-- [x] Create stellar objects with info
-- [x] Star stores three js object reference
-- [x] Break out rendering pipeline logic
-- [ ] Consolidate parameters/config
-
-- [x] Generate galaxy data structure 
-- [x] Generate galaxy three js visualization from params and data structure
-- [ ] Make three js visualization updatable from diffs
-
-- [ ] Update to TS
 - [ ] Use npm package w/ bundler?
 
 # Server
+- [ ] Make three js visualization updatable from diffs
 - [ ] Create a game server that runs a basic simulation script on the galaxy (dice rolls)
 - [ ] Sync to client via websockets
 - [ ] Persist full galaxy in Redis (just uuids + game state info)
