@@ -2,17 +2,16 @@ import * as THREE from 'three'
 
 import { MapControls } from 'three/addons/controls/OrbitControls.js'
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
-import { Galaxy, Galaxy3D } from './js/objects/Galaxy.js';
+import { Galaxy, Galaxy3D } from './static/js/objects/Galaxy.js';
 
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { fragment, vertex } from "./js/shaders/CompositionShader.js";
-import { updateHazeScale } from "./js/objects/Haze.js";
-import { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER } from "./js/config/config.js";
-import { Universe } from './js/objects/Universe.js';
+import { fragment, vertex } from "./static/js/shaders/CompositionShader.js";
+import { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER } from "./static/js/config/config.js";
+import { Universe } from './static/js/objects/Universe.js';
 
 let canvas, renderer, camera, scene, orbit, baseComposer, bloomComposer, overlayComposer, galaxy, galaxy3D, skybox
 
