@@ -1,15 +1,10 @@
 import * as THREE from 'three'
 
 // Data and visualization
-import { Galaxy3D } from './static/js/objects/Galaxy3D.js';
-import { Galaxy } from './static/js/data/GalaxyData.js';
-import { User } from './static/js/objects/User.js';
+import { Galaxy3D, Galaxy, User, Universe, CompositionShader } from './js/index.js';
+import { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER } from "./js/index.js";
 
 // Rendering
-import { fragment, vertex } from "./static/js/shaders/CompositionShader.js";
-import { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER } from "./static/js/config/config.js";
-import { Universe } from './static/js/objects/Universe.js';
-
 import { MapControls } from 'three/addons/controls/OrbitControls.js'
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
 
@@ -18,7 +13,6 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { getRandomItem } from './static/js/util.js';
 
 let canvas, renderer, camera, scene, orbit, baseComposer, bloomComposer, overlayComposer, galaxy, galaxy3D, skybox
 
@@ -92,8 +86,8 @@ function initRenderPipeline() {
                 bloomTexture: { value: bloomComposer.renderTarget2.texture },
                 overlayTexture: { value: overlayComposer.renderTarget2.texture }
             },
-            vertexShader: vertex,
-            fragmentShader: fragment,
+            vertexShader: CompositionShader.vertex,
+            fragmentShader: CompositionShader.fragment,
             defines: {}
         } ), 'baseTexture'
     );
