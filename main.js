@@ -2,7 +2,8 @@ import * as THREE from 'three'
 
 import { MapControls } from 'three/addons/controls/OrbitControls.js'
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
-import { Galaxy, Galaxy3D } from './static/js/objects/Galaxy.js';
+import { Galaxy3D } from './static/js/objects/Galaxy.js';
+import { Galaxy } from './static/js/data/GalaxyData.js';
 
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';

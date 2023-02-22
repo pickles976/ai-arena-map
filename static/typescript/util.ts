@@ -1,3 +1,7 @@
+import * as THREE from "three"
+import { GalaxyParams } from "./config/GalaxyParams";
+
+
 export function gaussianRandom(mean=0, stdev=1) {
     let u = 1 - Math.random(); //Converting [0,1) to (0,1)
     let v = Math.random();
@@ -22,4 +26,21 @@ export function getRandomItem(list : any[]) : any {
 
 export function clamp(value : number, minimum : number, maximum : number) : number {
     return Math.min(maximum, Math.max(minimum, value))
+}
+
+// modify a Vector3 by some spiral factor
+export function spiral(x : number, y : number,z : number,offset : number, params : GalaxyParams) : THREE.Vector3 {
+
+    let r = Math.sqrt(x**2 + y**2) 
+
+    let theta = offset 
+
+    // calculate the angle
+    theta += x > 0 ? Math.atan(y/x) : Math.atan(y/x) + Math.PI
+
+    // add rotation based on distance
+    theta += (r / params.armXDist) * params.spiral
+
+    return new THREE.Vector3(r * Math.cos(theta), r * Math.sin(theta), z)
+
 }
