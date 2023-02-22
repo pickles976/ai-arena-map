@@ -3,6 +3,7 @@ import * as THREE from 'three'
 // Data and visualization
 import { Galaxy3D } from './static/js/objects/Galaxy3D.js';
 import { Galaxy } from './static/js/data/GalaxyData.js';
+import { User } from './static/js/objects/User.js';
 
 // Rendering
 import { fragment, vertex } from "./static/js/shaders/CompositionShader.js";
@@ -17,6 +18,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { getRandomItem } from './static/js/util.js';
 
 let canvas, renderer, camera, scene, orbit, baseComposer, bloomComposer, overlayComposer, galaxy, galaxy3D, skybox
 
@@ -171,7 +173,14 @@ initThree()
 initSkybox()
 
 galaxy = new Galaxy(GALAXY_PARAMS)
-galaxy.setUsers(["Dave", "Joe", "Bob"])
+galaxy.setUsers([
+    new User("0", "Dave", "#FFFFFF"), 
+    new User("1", "Bob", "#FFFF00"), 
+    new User("2", "Joe", "#00FF00"), 
+    new User("3", "Alice", "#0000FF")
+])
+
 galaxy3D = new Galaxy3D(scene, galaxy)
+
 
 requestAnimationFrame(render)

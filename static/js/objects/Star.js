@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { postfixes, prefixes, starTypes } from "../config/distributions.js";
 import { getRandomItem, uuid } from "../util.js";
 import { words } from "../config/words.js";
-import { BLOOM_LAYER, BUBBLE_MAX, BUBBLE_MIN, FAR_TEXT_PLANE, NEAR_TEXT_PLANE, OVERLAY_LAYER, STAR_MAX, STAR_MIN } from "../config/config.js";
+import { BLOOM_LAYER, BUBBLE_MAX, BUBBLE_MIN, ENERGY_MULTIPLIER, FAR_TEXT_PLANE, NEAR_TEXT_PLANE, OVERLAY_LAYER, STAR_MAX, STAR_MIN } from "../config/config.js";
 import { createText, updateText } from "./Text.js";
 // Sprites
 const map = new THREE.TextureLoader().load('./static/images/sprite120.png');
@@ -70,7 +70,7 @@ export class Star {
             updateText(this.nameObj, dist, this.position, camera, frustum, -1);
             if (this.owner != null) {
                 if (this.ownerObj == null) {
-                    this.ownerObj = createText(`Owner: ${this.owner}`);
+                    this.ownerObj = createText(`Owner: ${this.owner.name}`);
                 }
                 updateText(this.ownerObj, dist, this.position, camera, frustum, 1);
             }
@@ -89,7 +89,7 @@ export class Star {
         }
     }
     // convert a star class into a three object
-    toThreeObject() {
+    toThreeObject(scene) {
         // actual star object
         let star = new THREE.Sprite(materials[this.starType]);
         // set to bloom layer
@@ -99,18 +99,31 @@ export class Star {
         star.name = this.name;
         // store a reference to the 3D object in this object
         this.obj = star;
-        return star;
+        scene.add(star);
     }
-    addBubble() {
-        // create Sphere of influence object
-        let bubble = new THREE.Sprite(bubbleMat);
-        bubble.layers.set(OVERLAY_LAYER);
-        bubble.scale.multiplyScalar(BUBBLE_SIZE);
-        bubble.position.copy(this.position);
-        this.bubble = bubble;
-        return bubble;
+    updateOwner(user) {
+        this.owner = user;
+    }
+    updateBubble(scene) {
+        if (this.owner) {
+            if (this.bubble == null) {
+                let tempMat = new THREE.SpriteMaterial({ map: map, color: 0x00FF00, depthTest: false });
+                //@ts-ignore
+                tempMat.color.setStyle(this.owner.color);
+                // create Sphere of influence object
+                let bubble = new THREE.Sprite(tempMat);
+                bubble.layers.set(OVERLAY_LAYER);
+                bubble.scale.multiplyScalar(BUBBLE_SIZE);
+                bubble.position.copy(this.position);
+                this.bubble = bubble;
+                scene.add(bubble);
+            }
+            else {
+                this.bubble.material.color.setStyle(this.owner.color.toString());
+            }
+        }
     }
     update() {
-        this.energy += starTypes.size[this.starType];
+        this.energy += starTypes.size[this.starType] * ENERGY_MULTIPLIER;
     }
 }

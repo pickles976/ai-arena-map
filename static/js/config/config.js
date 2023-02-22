@@ -11,6 +11,8 @@ export const OVERLAY_LAYER = 2;
 // near and far clipping planes for text rendering
 export const NEAR_TEXT_PLANE = 0.015;
 export const FAR_TEXT_PLANE = 0.12;
+// Energy is based on star size * this multiplier
+export const ENERGY_MULTIPLIER = 4.0;
 // Galaxy stuff
 const NUM_STARS = 5000;
 const GALAXY_HEIGHT = 5;

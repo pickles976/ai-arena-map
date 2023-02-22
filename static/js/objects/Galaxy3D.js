@@ -6,6 +6,7 @@ export class Galaxy3D {
         this.scene = scene;
         this.params = galaxy.params;
         this.stars = galaxy.stars;
+        this.starDict = galaxy.starDict;
         this.haze = [];
         this.generate3D();
     }
@@ -17,7 +18,7 @@ export class Galaxy3D {
     generateHaze(numStars, arms, params) {
         let hazeArray = generateGalaxyFromObject(numStars, arms, params, (pos) => createHaze(pos));
         hazeArray.forEach((h) => {
-            // add star
+            // add haze
             this.scene.add(h);
         });
         return hazeArray;
@@ -25,12 +26,16 @@ export class Galaxy3D {
     generateStars3D() {
         this.stars.forEach((star) => {
             // add star
-            this.scene.add(star.toThreeObject());
-            // draw bubble if star is owned
-            if (star.owner) {
-                this.scene.add(star.addBubble());
-            }
+            star.toThreeObject(this.scene);
+            // update the bubble for this star
+            star.updateBubble(this.scene);
         });
+    }
+    // Update a star with some data
+    updateStar(id, owner) {
+        let star = this.starDict[id];
+        star.updateOwner(owner);
+        star.updateBubble(this.scene);
     }
     // Update the galaxy based on camera zoom
     updateFromZoom(camera) {

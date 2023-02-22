@@ -15,7 +15,7 @@ export function uuid() : string {
     let id = ""
     for (let i = 0; i < length; i++) {
         let num = Math.floor(Math.random() * 36)
-        id += num > 9 ? String.fromCharCode(num + 88) : `${num}` // 0->9 returns a number, 10 + returns a character. 97 is lowercase a, 88 comes from 97 - 9
+        id += num > 9 ? String.fromCharCode(num + 87) : `${num}` // 0->9 returns a number, 10 + returns a character. 97 is lowercase a, 87 comes from 97 - 10
     }
     return id
 }

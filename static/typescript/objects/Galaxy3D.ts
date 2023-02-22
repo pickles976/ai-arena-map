@@ -4,18 +4,21 @@ import * as THREE from "three"
 import { GalaxyParams } from "../config/GalaxyParams.js";
 import { generateGalaxyFromObject } from "./GalaxyGenerator.js";
 import { Galaxy } from "../data/GalaxyData.js";
+import { User } from "./User.js";
 
 export class Galaxy3D {
 
     scene : THREE.Scene
     params : GalaxyParams
     stars : Star[]
+    starDict : { [id: string] : Star }
     haze : THREE.Sprite[]
 
     constructor (scene : THREE.Scene, galaxy : Galaxy) {
         this.scene = scene
         this.params = galaxy.params
         this.stars = galaxy.stars
+        this.starDict = galaxy.starDict
         this.haze = []
         this.generate3D()
     }
@@ -31,7 +34,7 @@ export class Galaxy3D {
         let hazeArray = generateGalaxyFromObject(numStars, arms, params, (pos : THREE.Vector3) => createHaze(pos))
 
         hazeArray.forEach((h) => {
-            // add star
+            // add haze
             this.scene.add(h)
         })
     
@@ -43,15 +46,20 @@ export class Galaxy3D {
         this.stars.forEach((star) => {
     
             // add star
-            this.scene.add(star.toThreeObject())
+            star.toThreeObject(this.scene)
 
-            // draw bubble if star is owned
-            if (star.owner) {
-                this.scene.add(star.addBubble())
-            }
+            // update the bubble for this star
+            star.updateBubble(this.scene)
     
         })
     
+    }
+
+    // Update a star with some data
+    updateStar(id: string, owner: User) {
+        let star = this.starDict[id]
+        star.updateOwner(owner)
+        star.updateBubble(this.scene)
     }
 
     // Update the galaxy based on camera zoom

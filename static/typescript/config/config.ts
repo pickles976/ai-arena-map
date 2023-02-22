@@ -16,6 +16,9 @@ export const OVERLAY_LAYER = 2
 export const NEAR_TEXT_PLANE = 0.015
 export const FAR_TEXT_PLANE = 0.12
 
+// Energy is based on star size * this multiplier
+export const ENERGY_MULTIPLIER = 4.0
+
 
 // Galaxy stuff
 const NUM_STARS = 5000

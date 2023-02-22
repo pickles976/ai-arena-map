@@ -16,7 +16,7 @@ varying vec2 vUv;
 void main() {
 
     // Baselayer + bloomlayer + 0.2(overlay)
-    gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) + vec4(0.2) * texture2D(overlayTexture, vUv) );
+    gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) + vec4(0.3) * texture2D(overlayTexture, vUv) );
 
 }
 
