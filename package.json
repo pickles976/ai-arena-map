@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/pickles976/ai-arena-map#readme",
   "dependencies": {
+    "ai-arena-map": "^1.0.0",
     "three": "^0.149.0"
   }
 }
