@@ -14,7 +14,7 @@ export const OVERLAY_LAYER = 2
 
 // near and far clipping planes for text rendering
 export const NEAR_TEXT_PLANE = 0.015
-export const FAR_TEXT_PLANE = 0.115
+export const FAR_TEXT_PLANE = 0.12
 
 
 // Galaxy stuff

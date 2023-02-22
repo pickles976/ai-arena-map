@@ -20,6 +20,8 @@ export class Star {
         this.bubble = null;
         this.owner = null;
         this.nameObj = null;
+        this.ownerObj = null;
+        this.energy = 0;
     }
     // Select the star type
     generateStarType() {
@@ -65,13 +67,24 @@ export class Star {
                 // Create text
                 this.nameObj = createText(this.name);
             }
-            updateText(this.nameObj, dist, this.position, camera, frustum);
+            updateText(this.nameObj, dist, this.position, camera, frustum, -1);
+            if (this.owner != null) {
+                if (this.ownerObj == null) {
+                    this.ownerObj = createText(`Owner: ${this.owner}`);
+                }
+                updateText(this.ownerObj, dist, this.position, camera, frustum, 1);
+            }
         }
         else {
             if (this.nameObj != null) {
                 // remove text
                 this.nameObj.remove();
                 this.nameObj = null;
+            }
+            if (this.ownerObj != null) {
+                // remove text
+                this.ownerObj.remove();
+                this.ownerObj = null;
             }
         }
     }
@@ -96,5 +109,8 @@ export class Star {
         bubble.position.copy(this.position);
         this.bubble = bubble;
         return bubble;
+    }
+    update() {
+        this.energy += starTypes.size[this.starType];
     }
 }

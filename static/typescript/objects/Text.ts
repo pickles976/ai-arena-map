@@ -21,7 +21,7 @@ export function createText(data : string) : HTMLDivElement{
 }
 
 // update text position in browser based on camera projection from three
-export function updateText(textObj : HTMLDivElement, dist : number, position : THREE.Vector3, camera : THREE.Camera, frustum : THREE.Frustum) {
+export function updateText(textObj : HTMLDivElement, dist : number, position : THREE.Vector3, camera : THREE.Camera, frustum : THREE.Frustum, sign: number) {
 
     if (!frustum.containsPoint(position)) { 
         textObj.style.display ="none"
@@ -42,7 +42,7 @@ export function updateText(textObj : HTMLDivElement, dist : number, position : T
         textObj.style.top = `${vec.y}px`
         textObj.style.left = `${vec.x}px`
         let scale = 0.1 / dist
-        textObj.style.transform = `scale(${scale}) translate(-${50 / scale}%, -${50 + (100 * Math.sqrt(scale / 2))}%)`
+        textObj.style.transform = `scale(${scale}) translate(-${height / (2 * scale)}%, ${sign * height * (1 + Math.sqrt(scale / 2))}%)`
         textObj.style.display ="block"
     } else {
         textObj.style.display ="none"

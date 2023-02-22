@@ -26,9 +26,10 @@ export class Galaxy3D {
         this.stars.forEach((star) => {
             // add star
             this.scene.add(star.toThreeObject());
-            // if (Math.random() < 0.05) {
-            //     scene.add(star.addBubble())
-            // }
+            // draw bubble if star is owned
+            if (star.owner) {
+                this.scene.add(star.addBubble());
+            }
         });
     }
     // Update the galaxy based on camera zoom

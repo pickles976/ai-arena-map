@@ -44,10 +44,12 @@ export class Galaxy3D {
     
             // add star
             this.scene.add(star.toThreeObject())
+
+            // draw bubble if star is owned
+            if (star.owner) {
+                this.scene.add(star.addBubble())
+            }
     
-            // if (Math.random() < 0.05) {
-            //     scene.add(star.addBubble())
-            // }
         })
     
     }

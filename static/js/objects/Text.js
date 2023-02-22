@@ -18,7 +18,7 @@ export function createText(data) {
     return text;
 }
 // update text position in browser based on camera projection from three
-export function updateText(textObj, dist, position, camera, frustum) {
+export function updateText(textObj, dist, position, camera, frustum, sign) {
     if (!frustum.containsPoint(position)) {
         textObj.style.display = "none";
         return;
@@ -34,7 +34,7 @@ export function updateText(textObj, dist, position, camera, frustum) {
         textObj.style.top = `${vec.y}px`;
         textObj.style.left = `${vec.x}px`;
         let scale = 0.1 / dist;
-        textObj.style.transform = `scale(${scale}) translate(-${50 / scale}%, -${50 + (100 * Math.sqrt(scale / 2))}%)`;
+        textObj.style.transform = `scale(${scale}) translate(-${height / (2 * scale)}%, ${sign * height * (1 + Math.sqrt(scale / 2))}%)`;
         textObj.style.display = "block";
     }
     else {
