@@ -1,5 +1,10 @@
 import * as THREE from 'three'
 
+if (!window && globalThis) {
+    // @ts-ignore
+    globalThis.window = {}
+}
+
 let width = 100
 let height = 100
 let drawRadius = window.innerWidth / 3.5
