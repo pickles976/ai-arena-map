@@ -1,13 +1,8 @@
 import * as THREE from 'three'
 
-if (!window && globalThis) {
-    // @ts-ignore
-    globalThis.window = {}
-}
-
 let width = 100
 let height = 100
-let drawRadius = window.innerWidth / 3.5
+let drawRadius = globalThis.innerWidth / 3.5
 
 // Create the text element object
 export function createText(data : string) : HTMLDivElement{
@@ -39,11 +34,11 @@ export function updateText(textObj : HTMLDivElement, dist : number, position : T
     let y = vec.y + height
 
     // dont draw text in the periphery. It's annoying.
-    let center = new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+    let center = new THREE.Vector2(globalThis.innerWidth / 2, globalThis.innerHeight / 2)
     let radius = center.distanceTo(vec)
 
     // Keep text within these bounds
-    if (radius < drawRadius && x + width > 0 && x < window.innerWidth && y > 0 && y < window.innerHeight) {
+    if (radius < drawRadius && x + width > 0 && x < globalThis.innerWidth && y > 0 && y < globalThis.innerHeight) {
         textObj.style.top = `${vec.y}px`
         textObj.style.left = `${vec.x}px`
         let scale = 0.1 / dist
@@ -57,7 +52,7 @@ export function updateText(textObj : HTMLDivElement, dist : number, position : T
 // 3D position to screen space
 function toXYCoords (pos : THREE.Vector3, camera : THREE.Camera) : THREE.Vector2 {
     let vector = pos.clone().project(camera)
-    vector.x = (vector.x + 1)/2 * window.innerWidth;
-    vector.y = -(vector.y - 1)/2 * window.innerHeight;
+    vector.x = (vector.x + 1)/2 * globalThis.innerWidth;
+    vector.y = -(vector.y - 1)/2 * globalThis.innerHeight;
     return new THREE.Vector2(vector.x, vector.y)
 }

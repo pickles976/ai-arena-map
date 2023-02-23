@@ -1,6 +1,6 @@
 {
   "name": "ai-arena-map",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Galactic map for ai-arena game",
   "main": "main.js",
   "type": "module",
@@ -20,10 +20,10 @@
   },
   "homepage": "https://github.com/pickles976/ai-arena-map#readme",
   "dependencies": {
-    "ai-arena-map": "^1.0.0",
-    "three": "^0.149.0"
+    "ai-arena-map": "^1.0.0"
   },
   "devDependencies": {
-    "@types/three": "^0.149.0"
+    "@types/three": "^0.149.0",
+    "three": "^0.149.0"
   }
 }
