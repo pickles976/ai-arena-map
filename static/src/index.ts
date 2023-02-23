@@ -5,5 +5,4 @@ import { User } from "./objects/User.js";
 import { Universe } from "./objects/Universe.js";
 import { CompositionShader } from "./shaders/CompositionShader.js";
 
-export { Galaxy, Galaxy3D, User, Universe, CompositionShader}
-export { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER }
+export { Galaxy, Galaxy3D, User, Universe, CompositionShader, BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER}
