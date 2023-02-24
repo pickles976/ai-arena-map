@@ -1,7 +1,7 @@
-import { postfixes, prefixes, starTypes } from "../config/distributions.js";
-import { getRandomItem, uuid } from "../util/util.js";
-import { words } from "../config/words.js";
-import { ENERGY_MULTIPLIER } from "../config/config.js";
+import { postfixes, prefixes, starTypes } from "../config/distributions";
+import { getRandomItem, uuid } from "../util/util";
+import { words } from "../config/words";
+import { ENERGY_MULTIPLIER } from "../config/config";
 export class StarData {
     constructor(position) {
         this.position = position;

@@ -1,6 +1,6 @@
-import { generateGalaxyFromObject } from "../util/GalaxyGenerator.js";
-import { StarData } from "./StarData.js";
-import { getRandomItem } from "../util/util.js";
+import { generateGalaxyFromObject } from "../util/GalaxyGenerator";
+import { StarData } from "./StarData";
+import { getRandomItem } from "../util/util";
 export class GalaxyData {
     constructor(params) {
         this.params = params;

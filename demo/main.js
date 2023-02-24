@@ -1,12 +1,13 @@
 import * as THREE from 'three'
 
 // Data and visualization
-import { Galaxy3D, Universe, CompositionShader } from './node_modules/ai-arena-map/pkg/index.js';
-import { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER } from "./node_modules/ai-arena-map/pkg/index.js";
-import { GalaxyData, UserData } from './node_modules/ai-arena-map-headless/pkg/index.js'
+import { Galaxy3D, Universe, CompositionShader } from 'ai-arena-map';
+import { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, OVERLAY_LAYER } from "ai-arena-map";
+import { GalaxyData, UserData, GALAXY_PARAMS } from 'ai-arena-map-headless'
 
 // Rendering
 import { MapControls } from 'three/addons/controls/OrbitControls.js'
+
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
 
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';

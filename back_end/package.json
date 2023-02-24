@@ -1,8 +1,8 @@
 {
   "name": "ai-arena-map-headless",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Headless ai-arena map stuff",
-  "main": "index.js",
+  "main": "./pkg/index.js",
   "dependencies": {
     "gl-matrix": "^3.4.3",
     "math.gl": "^3.6.3",

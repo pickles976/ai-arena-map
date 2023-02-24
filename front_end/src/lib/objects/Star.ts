@@ -1,11 +1,11 @@
 import * as THREE from "three"
-import { BLOOM_LAYER, BUBBLE_MAX, BUBBLE_MIN, FAR_TEXT_PLANE, NEAR_TEXT_PLANE, OVERLAY_LAYER, STAR_MAX, STAR_MIN } from "../config/config.js";
-import { createText, updateText } from "./Text.js";
+import { BLOOM_LAYER, BUBBLE_MAX, BUBBLE_MIN, FAR_TEXT_PLANE, NEAR_TEXT_PLANE, OVERLAY_LAYER, STAR_MAX, STAR_MIN } from "../config/config";
+import { createText, updateText } from "./Text";
 import { StarData, UserData, starTypes } from "ai-arena-map-headless";
-import { mathGLtoTHREE } from "../util.js";
+import { mathGLtoTHREE } from "../util";
 
 // Sprites
-const map = new THREE.TextureLoader().load( './static/images/sprite120.png' );
+const map = new THREE.TextureLoader().load( '../../../resources/images/sprite120.png' );
 const materials = starTypes.color.map((color) => new THREE.SpriteMaterial( { map: map, color: color } ))
 
 // bubble mat

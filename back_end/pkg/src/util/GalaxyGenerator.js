@@ -1,4 +1,4 @@
-import { gaussianRandom, spiral } from "./util.js";
+import { gaussianRandom, spiral } from "./util";
 // Generates the Star Data objects only
 export function generateGalaxyFromObject(numStars, arms, params, generator) {
     let objects = [];

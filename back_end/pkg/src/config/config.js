@@ -1,4 +1,4 @@
-import { GalaxyParams } from "./GalaxyParams.js";
+import { GalaxyParams } from "./GalaxyParams";
 // Energy is based on star size * this multiplier
 export const ENERGY_MULTIPLIER = 4.0;
 // Galaxy stuff

@@ -1,0 +1,21 @@
+{
+  "name": "demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^4.1.0"
+  },
+  "dependencies": {
+    "@windfish-studio/three-map-controls": "^1.1.10",
+    "ai-arena-map": "^1.1.2",
+    "ai-arena-map-headless": "^1.0.2",
+    "three": "^0.150.0",
+    "three-map-controls": "^1.1.0"
+  }
+}

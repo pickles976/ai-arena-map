@@ -4,7 +4,7 @@ import {
 	Mesh,
 	ShaderMaterial
 } from 'three';
-import { fragment, vertex } from '../shaders/UniverseShader.js';
+import { fragment, vertex } from '../shaders/UniverseShader';
 
 /** Universe "Skybox" */
 class Universe extends Mesh {

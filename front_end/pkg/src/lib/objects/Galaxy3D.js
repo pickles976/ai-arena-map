@@ -1,5 +1,5 @@
-import { createHaze, updateHazeScale } from "./Haze.js";
-import { Star } from "./Star.js";
+import { createHaze, updateHazeScale } from "./Haze";
+import { Star } from "./Star";
 import * as THREE from "three";
 import { generateGalaxyFromObject } from "ai-arena-map-headless";
 export class Galaxy3D {
