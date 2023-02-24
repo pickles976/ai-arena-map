@@ -15,7 +15,7 @@
   </script>
 
         <!-- PRNG -->
-        <script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js></script>
+        <script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js></script>
 
   </head>
 
@@ -23,7 +23,9 @@
   <body>
     <script>
       // Override math.random with a seeded prng
-      Math.seedrandom(1234);
+      // Math.seedrandom(1234);
+      // console.log(Math.random())
+      // console.log(Math.random())
     </script>
 
     <canvas id="canvas" data-engine="three.js r146"></canvas>

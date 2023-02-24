@@ -168,7 +168,13 @@ function initSkybox() {
 initThree()
 initSkybox()
 
+Math.seedrandom(1234);
+
 galaxy = new GalaxyData(GALAXY_PARAMS)
+
+console.log(galaxy.stars.length)
+console.log(galaxy.stars[0])
+
 galaxy.setUsers([
     new UserData("0", "Dave", "#FFFFFF"), 
     new UserData("1", "Bob", "#FFFF00"), 
