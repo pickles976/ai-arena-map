@@ -1,6 +1,6 @@
-export class GalaxyParams {
+var GalaxyParams = /** @class */ (function () {
     // @ts-ignore
-    constructor(numStars, galaxyHeight, coreXDist, coreYDist, outerCoreXDist, outerCoreYDist, armXDist, armYDist, armXMean, armYMean, spiral, arms, hazeRatio) {
+    function GalaxyParams(numStars, galaxyHeight, coreXDist, coreYDist, outerCoreXDist, outerCoreYDist, armXDist, armYDist, armXMean, armYMean, spiral, arms, hazeRatio) {
         this.numStars = numStars;
         this.galaxyHeight = galaxyHeight;
         this.coreXDist = coreXDist;
@@ -15,4 +15,6 @@ export class GalaxyParams {
         this.arms = arms;
         this.hazeRatio = hazeRatio;
     }
-}
+    return GalaxyParams;
+}());
+export { GalaxyParams };

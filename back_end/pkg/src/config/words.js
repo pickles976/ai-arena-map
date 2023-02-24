@@ -1,4 +1,4 @@
-export const words = [
+export var words = [
     "Ab",
     "Abdere",
     "Abesse",
