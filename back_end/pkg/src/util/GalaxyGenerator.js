@@ -21,3 +21,4 @@ export function generateGalaxyFromObject(numStars, arms, params, generator) {
     }
     return objects;
 }
+//# sourceMappingURL=GalaxyGenerator.js.map

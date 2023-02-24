@@ -7,3 +7,4 @@ var UserData = /** @class */ (function () {
     return UserData;
 }());
 export { UserData };
+//# sourceMappingURL=UserData.js.map

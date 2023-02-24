@@ -14,3 +14,4 @@ test("Get stars in range works", function () {
     star.update();
     console.log(galaxy.getStarsInRange(star.uuid).length);
 });
+//# sourceMappingURL=index.test.js.map

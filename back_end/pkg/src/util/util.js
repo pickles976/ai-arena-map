@@ -44,3 +44,4 @@ export function spiral(x, y, z, offset, params) {
     theta += (r / params.armXDist) * params.spiral;
     return new Vector3(r * Math.cos(theta), r * Math.sin(theta), z);
 }
+//# sourceMappingURL=util.js.map

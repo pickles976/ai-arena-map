@@ -997,3 +997,4 @@ export var words = [
     "Vulpes",
     "Vultus"
 ];
+//# sourceMappingURL=words.js.map

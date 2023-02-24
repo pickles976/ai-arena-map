@@ -6,4 +6,3 @@ import { GalaxyData } from "./src/objects/GalaxyData";
 import { StarData } from "./src/objects/StarData";
 import { UserData } from "./src/objects/UserData";
 export { GALAXY_PARAMS, GalaxyData, StarData, UserData, starTypes, generateGalaxyFromObject, GalaxyParams };
-//# sourceMappingURL=index.js.map

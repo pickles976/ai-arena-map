@@ -29,3 +29,4 @@ export var postfixes = [
     "-IX",
     "-X"
 ];
+//# sourceMappingURL=distributions.js.map

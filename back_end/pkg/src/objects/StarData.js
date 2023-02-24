@@ -44,3 +44,4 @@ var StarData = /** @class */ (function () {
     return StarData;
 }());
 export { StarData };
+//# sourceMappingURL=StarData.js.map

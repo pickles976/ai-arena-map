@@ -59,3 +59,4 @@ var GalaxyData = /** @class */ (function () {
     return GalaxyData;
 }());
 export { GalaxyData };
+//# sourceMappingURL=GalaxyData.js.map

@@ -18,3 +18,4 @@ var GalaxyParams = /** @class */ (function () {
     return GalaxyParams;
 }());
 export { GalaxyParams };
+//# sourceMappingURL=GalaxyParams.js.map
