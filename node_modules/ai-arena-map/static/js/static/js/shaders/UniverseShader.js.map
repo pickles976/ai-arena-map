@@ -1,1 +1,0 @@
-{"version":3,"file":"UniverseShader.js","sourceRoot":"","sources":["../../../shaders/UniverseShader.js"],"names":[],"mappings":"AAAA,YAAY,CAAC;AAKb,MAAM,CAAC,cAAc,CAAC,OAAO,EAAE,YAAY,EAAE,EAAE,KAAK,EAAE,IAAI,EAAE,CAAC,CAAC;AAC9D,OAAO,CAAC,QAAQ,GAAG,OAAO,CAAC,MAAM,GAAG,KAAK,CAAC,CAAC;AAC3C,OAAO,CAAC,MAAM,GAAG,iKAMb,CAAC;AACL,OAAO,CAAC,QAAQ,GAAG,wvDAqDf,CAAC"}

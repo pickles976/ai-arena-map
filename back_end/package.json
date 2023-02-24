@@ -1,0 +1,21 @@
+{
+  "name": "ai-arena-map-headless",
+  "version": "1.0.0",
+  "description": "Headless ai-arena map stuff",
+  "main": "index.js",
+  "dependencies": {
+    "gl-matrix": "^3.4.3",
+    "math.gl": "^3.6.3",
+    "regenerator-runtime": "^0.13.11"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.4.0",
+    "jest": "^29.4.3",
+    "ts-jest": "^29.0.5"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Sebastian Gomez",
+  "license": "MIT"
+}
