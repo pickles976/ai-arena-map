@@ -1,10 +1,7 @@
 import { createHaze, updateHazeScale } from "./Haze.js";
 import { Star } from "./Star.js";
 import * as THREE from "three"
-import { GalaxyParams } from "../config/GalaxyParams.js";
-import { generateGalaxyFromObject } from "./GalaxyGenerator.js";
-import { Galaxy } from "../data/GalaxyData.js";
-import { User } from "./User.js";
+import { UserData, generateGalaxyFromObject, GalaxyData, GalaxyParams } from "ai-arena-map-headless";
 
 export class Galaxy3D {
 
@@ -14,11 +11,14 @@ export class Galaxy3D {
     starDict : { [id: string] : Star }
     haze : THREE.Sprite[]
 
-    constructor (scene : THREE.Scene, galaxy : Galaxy) {
+    constructor (scene : THREE.Scene, galaxy : GalaxyData) {
         this.scene = scene
         this.params = galaxy.params
-        this.stars = galaxy.stars
-        this.starDict = galaxy.starDict
+        this.stars = galaxy.stars.map((data) => new Star(data))
+
+        this.starDict = {}
+        this.stars.forEach((star) => this.starDict[star.uuid] = star)
+
         this.haze = []
         this.generate3D()
     }
@@ -56,7 +56,7 @@ export class Galaxy3D {
     }
 
     // Update a star with some data
-    updateStar(id: string, owner: User) {
+    updateStar(id: string, owner: UserData) {
         let star = this.starDict[id]
         star.updateOwner(owner)
         star.updateBubble(this.scene)

@@ -5,7 +5,6 @@ import { clamp } from "../util.js";
 const OPACITY = 0.2
 const MAX_SIZE = 50.0
 const MIN_SIZE = 20.0
-const alpha = new THREE.TextureLoader().load( './static/images/alpha_noise.png' );
 const hazeImage = new THREE.TextureLoader().load( './static/images/feathered60.png' );
 const hazeSprite = new THREE.SpriteMaterial( { map: hazeImage, color: 0x0082ff, opacity: OPACITY, depthTest: false, depthWrite: false } )
 

@@ -14,7 +14,9 @@
     "ts-jest": "^29.0.5"
   },
   "scripts": {
-    "test": "jest"
+    "build" : "npx tsc -w",
+    "test": "jest",
+    "publish": "npm publish --access public"
   },
   "author": "Sebastian Gomez",
   "license": "MIT"

@@ -1,23 +1,21 @@
 import * as THREE from "three"
-import { postfixes, prefixes, starTypes } from "../config/distributions.js"
-import { getRandomItem, uuid } from "../util.js";
-import {words} from "../config/words.js"
-import { BLOOM_LAYER, BUBBLE_MAX, BUBBLE_MIN, ENERGY_MULTIPLIER, FAR_TEXT_PLANE, NEAR_TEXT_PLANE, OVERLAY_LAYER, STAR_MAX, STAR_MIN } from "../config/config.js";
+import { BLOOM_LAYER, BUBBLE_MAX, BUBBLE_MIN, FAR_TEXT_PLANE, NEAR_TEXT_PLANE, OVERLAY_LAYER, STAR_MAX, STAR_MIN } from "../config/config.js";
 import { createText, updateText } from "./Text.js";
-import { User } from "./User.js";
+import { StarData, UserData, starTypes } from "ai-arena-map-headless";
+import { mathGLtoTHREE } from "../util.js";
 
 // Sprites
 const map = new THREE.TextureLoader().load( './static/images/sprite120.png' );
 const materials = starTypes.color.map((color) => new THREE.SpriteMaterial( { map: map, color: color } ))
 
 // bubble mat
-const bubbleMat = new THREE.SpriteMaterial( { map: map, color: 0x00FF00, depthTest: false } )
+// const bubbleMat = new THREE.SpriteMaterial( { map: map, color: 0x00FF00, depthTest: false } )
 
 const BUBBLE_SIZE = 20.0
 
 export class Star {
 
-    owner : User | null
+    owner : UserData | null
     bubble : THREE.Sprite | null
     nameObj : HTMLDivElement | null
     ownerObj : HTMLDivElement | null
@@ -29,53 +27,21 @@ export class Star {
     starType: number
     name: string
 
-    energy: number
+    constructor(starData : StarData) {
 
-    constructor(position : THREE.Vector3) {
+        this.position = mathGLtoTHREE(starData.position)
 
-        this.position = position
+        this.uuid = starData.uuid
+        this.name = starData.name
+        this.starType = starData.starType
 
-        this.uuid = uuid()
-        this.name = this.generateName()
-        this.starType = this.generateStarType()
+        this.owner = starData.owner
 
+        // visualization objects
         this.obj = null
         this.bubble = null
-        this.owner = null
         this.nameObj = null
         this.ownerObj = null
-
-        this.energy = 0
-    }
-
-    // Select the star type
-    generateStarType() : number {
-        let num = Math.random() * 100.0
-        let pct = starTypes.percentage
-        for (let i = 0; i < pct.length; i++) {
-            num -= pct[i]
-            if (num < 0) {
-                return i
-            } 
-        }
-        return 0
-    }
-
-    // Randomly generate a name
-    generateName() : string {
-        let name = ""
-
-        if (Math.random() < 0.2) {
-            name += getRandomItem(prefixes)
-        }
-
-        name += getRandomItem(words)
-
-        if (Math.random() < 0.15) {
-            name += getRandomItem(postfixes)
-        }
-
-        return name
     }
 
     // Update the scale of the star and associiated objects
@@ -147,7 +113,7 @@ export class Star {
         scene.add(star)
     }
 
-    updateOwner(user : User) {
+    updateOwner(user : UserData) {
         this.owner = user
     }
 
@@ -174,10 +140,6 @@ export class Star {
                 this.bubble.material.color.setStyle(this.owner.color.toString())
             }
         }
-    }
-
-    update() {
-        this.energy += starTypes.size[this.starType] * ENERGY_MULTIPLIER
     }
 
 }

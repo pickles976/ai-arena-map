@@ -1,8 +1,9 @@
 import * as THREE from 'three'
 
 // Data and visualization
-import { Galaxy3D, Galaxy, User, Universe, CompositionShader } from './js/index.js';
-import { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER } from "./js/index.js";
+import { Galaxy3D, Universe, CompositionShader } from './node_modules/ai-arena-map/pkg/index.js';
+import { BASE_LAYER, BLOOM_LAYER, BLOOM_PARAMS, GALAXY_PARAMS, OVERLAY_LAYER } from "./node_modules/ai-arena-map/pkg/index.js";
+import { GalaxyData, UserData } from './node_modules/ai-arena-map-headless/pkg/index.js'
 
 // Rendering
 import { MapControls } from 'three/addons/controls/OrbitControls.js'
@@ -166,12 +167,12 @@ function initSkybox() {
 initThree()
 initSkybox()
 
-galaxy = new Galaxy(GALAXY_PARAMS)
+galaxy = new GalaxyData(GALAXY_PARAMS)
 galaxy.setUsers([
-    new User("0", "Dave", "#FFFFFF"), 
-    new User("1", "Bob", "#FFFF00"), 
-    new User("2", "Joe", "#00FF00"), 
-    new User("3", "Alice", "#0000FF")
+    new UserData("0", "Dave", "#FFFFFF"), 
+    new UserData("1", "Bob", "#FFFF00"), 
+    new UserData("2", "Joe", "#00FF00"), 
+    new UserData("3", "Alice", "#0000FF")
 ])
 
 galaxy3D = new Galaxy3D(scene, galaxy)

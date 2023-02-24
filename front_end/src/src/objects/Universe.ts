@@ -2,9 +2,7 @@ import {
 	BackSide,
 	BoxGeometry,
 	Mesh,
-	ShaderMaterial,
-	UniformsUtils,
-	Vector3
+	ShaderMaterial
 } from 'three';
 import { fragment, vertex } from '../shaders/UniverseShader.js';
 

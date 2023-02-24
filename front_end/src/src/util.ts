@@ -1,6 +1,10 @@
 import * as THREE from "three"
-import { GalaxyParams } from "./config/GalaxyParams";
+import { GalaxyParams } from "ai-arena-map-headless";
+import {Vector3 as Vector3M} from '@math.gl/core';
 
+export function mathGLtoTHREE(vector: Vector3M) : THREE.Vector3 {
+    return new THREE.Vector3(vector.x,vector.y,vector.z)
+}
 
 export function gaussianRandom(mean=0, stdev=1) {
     let u = 1 - Math.random(); //Converting [0,1) to (0,1)
