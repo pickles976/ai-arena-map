@@ -2,23 +2,26 @@ import { generateGalaxyFromObject } from "../util/GalaxyGenerator";
 import { StarData } from "./StarData";
 import { getRandomItem } from "../util/util";
 var GalaxyData = /** @class */ (function () {
-    function GalaxyData(params) {
+    function GalaxyData(numStars, params) {
         var _this = this;
+        this.numStars = numStars;
         this.params = params;
-        this.stars = generateGalaxyFromObject(this.params.numStars, this.params.arms, this.params, function (pos) { return new StarData(pos); });
+        this.stars = generateGalaxyFromObject(this.numStars, this.params.arms, this.params, function (pos, id) { return new StarData(pos, id); });
         this.stars.sort(function (a, b) { return a.position.x - b.position.x; });
         this.starDict = {};
         this.stars.forEach(function (star) { return _this.starDict[star.uuid] = star; });
         this.users = [];
     }
     GalaxyData.prototype.setUsers = function (users) {
-        var _this = this;
         this.users = users;
+        // Get the first 1/3rd of stars
+        var tempStars = this.stars.slice(0, Math.floor(this.stars.length / 3));
         this.users.forEach(function (user) {
-            var star = getRandomItem(_this.stars);
+            // get a random item
+            var star = getRandomItem(tempStars);
             // loop until we find a star with no owner
             while (!!(star === null || star === void 0 ? void 0 : star.owner)) {
-                star = getRandomItem(_this.stars);
+                star = getRandomItem(tempStars);
             }
             // Set the star owner
             star.updateOwner(user);
@@ -54,7 +57,7 @@ var GalaxyData = /** @class */ (function () {
         // @ts-ignore
         var possible = Array.from(possibleStars).map(function (id) { return _this.starDict[id]; });
         // Return actual collisions
-        return possible.filter(function (temp) { return temp.position.distanceTo(pos) < star.energy; });
+        return possible.filter(function (temp) { return temp.position.distance(pos) < star.energy; });
     };
     GalaxyData.prototype.getEnemyStarsInRange = function (starID) {
         var star = this.starDict[starID];

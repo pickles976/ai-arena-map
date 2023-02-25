@@ -9,17 +9,17 @@ export class StarData {
 
     owner : UserData | null
     position: Vector3
-    uuid: string
+    uuid: number
     starType: number
     name: string
 
     energy: number
 
-    constructor(position : Vector3) {
+    constructor(position : Vector3, id: number) {
 
         this.position = position
+        this.uuid = id
 
-        this.uuid = uuid()
         this.name = this.generateName()
         this.starType = this.generateStarType()
         this.owner = null

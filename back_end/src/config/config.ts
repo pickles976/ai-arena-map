@@ -1,7 +1,7 @@
 import { GalaxyParams } from "./GalaxyParams"
 
 // Energy is based on star size * this multiplier
-export const ENERGY_MULTIPLIER = 4.0
+export const ENERGY_MULTIPLIER = 8.0
 
 // Galaxy stuff
 const NUM_STARS = 5000

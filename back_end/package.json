@@ -1,6 +1,6 @@
 {
   "name": "ai-arena-map-headless",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Headless ai-arena map stuff",
   "main": "./pkg/index.js",
   "type": "module",

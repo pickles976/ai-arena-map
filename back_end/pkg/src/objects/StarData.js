@@ -1,11 +1,11 @@
 import { postfixes, prefixes, starTypes } from "../config/distributions";
-import { getRandomItem, uuid } from "../util/util";
+import { getRandomItem } from "../util/util";
 import { words } from "../config/words";
 import { ENERGY_MULTIPLIER } from "../config/config";
 var StarData = /** @class */ (function () {
-    function StarData(position) {
+    function StarData(position, id) {
         this.position = position;
-        this.uuid = uuid();
+        this.uuid = id;
         this.name = this.generateName();
         this.starType = this.generateStarType();
         this.owner = null;

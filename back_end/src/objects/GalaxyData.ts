@@ -7,15 +7,18 @@ import {Vector3} from '@math.gl/core';
 
 export class GalaxyData {
 
+    numStars : number
     params: GalaxyParams
     stars: StarData[]
     starDict : { [id: string] : StarData }
     users: UserData[]
 
-    constructor(params : GalaxyParams) {
+    constructor(numStars : number, params : GalaxyParams) {
+
+        this.numStars = numStars
         this.params = params
 
-        this.stars = generateGalaxyFromObject(this.params.numStars, this.params.arms, this.params, (pos : Vector3) => new StarData(pos))
+        this.stars = generateGalaxyFromObject(this.numStars, this.params.arms, this.params, (pos : Vector3, id: number) => new StarData(pos, id))
         this.stars.sort((a,b) => a.position.x - b.position.x)
 
         this.starDict = {}
@@ -28,13 +31,17 @@ export class GalaxyData {
 
         this.users = users
 
+        // Get the first 1/3rd of stars
+        let tempStars = this.stars.slice(0, Math.floor(this.stars.length / 3))
+
         this.users.forEach((user) => {
 
-            let star = getRandomItem(this.stars)
+            // get a random item
+            let star = getRandomItem(tempStars)
 
             // loop until we find a star with no owner
             while(!!star?.owner) {
-                star = getRandomItem(this.stars)
+                star = getRandomItem(tempStars)
             }
             
             // Set the star owner
@@ -44,7 +51,7 @@ export class GalaxyData {
     }
 
     // Get stars that can be reached from the given star considering distance and energy
-    getStarsInRange(starID: string) {
+    getStarsInRange(starID: number) {
 
         let star = this.starDict[starID]
         let pos = star.position
@@ -81,7 +88,7 @@ export class GalaxyData {
 
     }
 
-    getEnemyStarsInRange(starID: string) {
+    getEnemyStarsInRange(starID: number) {
         let star = this.starDict[starID]
         if (star && star.owner) {
             let stars = this.getStarsInRange(starID)
@@ -92,7 +99,7 @@ export class GalaxyData {
         }
     }
 
-    getUnownedStarsInRange(starID: string) {
+    getUnownedStarsInRange(starID: number) {
         let stars = this.getStarsInRange(starID)
         return stars.filter((star) => !star.owner)
     }

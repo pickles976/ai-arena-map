@@ -14,7 +14,7 @@
   "dependencies": {
     "@windfish-studio/three-map-controls": "^1.1.10",
     "ai-arena-map": "^1.1.2",
-    "ai-arena-map-headless": "^1.0.2",
+    "ai-arena-map-headless": "^1.0.8",
     "three": "^0.150.0",
     "three-map-controls": "^1.1.0"
   }

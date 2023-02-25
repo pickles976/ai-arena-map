@@ -3,11 +3,11 @@ import { Vector3 } from '@math.gl/core';
 export declare class StarData {
     owner: UserData | null;
     position: Vector3;
-    uuid: string;
+    uuid: number;
     starType: number;
     name: string;
     energy: number;
-    constructor(position: Vector3);
+    constructor(position: Vector3, id: number);
     generateStarType(): number;
     generateName(): string;
     updateOwner(user: UserData): void;
