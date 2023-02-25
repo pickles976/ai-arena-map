@@ -77,8 +77,24 @@ export class GalaxyData {
         let possible = Array.from(possibleStars).map((id) => this.starDict[id])
 
         // Return actual collisions
-        return possible.filter((temp) => temp.position.distanceTo(pos) < star.energy)
+        return possible.filter((temp) => temp.position.distance(pos) < star.energy)
 
+    }
+
+    getEnemyStarsInRange(starID: string) {
+        let star = this.starDict[starID]
+        if (star && star.owner) {
+            let stars = this.getStarsInRange(starID)
+            stars = stars.filter((otherStar) => otherStar.owner) // get stars with owners
+
+            // @ts-ignore
+            return stars.filter((otherStar) => otherStar.owner.uuid != star.owner.uuid)
+        }
+    }
+
+    getUnownedStarsInRange(starID: string) {
+        let stars = this.getStarsInRange(starID)
+        return stars.filter((star) => !star.owner)
     }
 
 }

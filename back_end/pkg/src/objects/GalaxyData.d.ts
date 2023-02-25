@@ -11,4 +11,6 @@ export declare class GalaxyData {
     constructor(params: GalaxyParams);
     setUsers(users: UserData[]): void;
     getStarsInRange(starID: string): any[];
+    getEnemyStarsInRange(starID: string): any[] | undefined;
+    getUnownedStarsInRange(starID: string): any[];
 }

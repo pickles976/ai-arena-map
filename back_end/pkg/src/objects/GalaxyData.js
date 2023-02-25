@@ -56,6 +56,19 @@ var GalaxyData = /** @class */ (function () {
         // Return actual collisions
         return possible.filter(function (temp) { return temp.position.distanceTo(pos) < star.energy; });
     };
+    GalaxyData.prototype.getEnemyStarsInRange = function (starID) {
+        var star = this.starDict[starID];
+        if (star && star.owner) {
+            var stars = this.getStarsInRange(starID);
+            stars = stars.filter(function (otherStar) { return otherStar.owner; }); // get stars with owners
+            // @ts-ignore
+            return stars.filter(function (otherStar) { return otherStar.owner.uuid != star.owner.uuid; });
+        }
+    };
+    GalaxyData.prototype.getUnownedStarsInRange = function (starID) {
+        var stars = this.getStarsInRange(starID);
+        return stars.filter(function (star) { return !star.owner; });
+    };
     return GalaxyData;
 }());
 export { GalaxyData };
