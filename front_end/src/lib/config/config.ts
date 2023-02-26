@@ -14,6 +14,8 @@ export const OVERLAY_LAYER = 2
 export const NEAR_TEXT_PLANE = 0.015
 export const FAR_TEXT_PLANE = 0.12
 
+export const HAZE_RATIO = 4
+
 export const BLOOM_PARAMS = {
     exposure: 1,
     bloomStrength: 1.5,

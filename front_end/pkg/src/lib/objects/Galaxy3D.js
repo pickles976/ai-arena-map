@@ -2,6 +2,7 @@ import { createHaze, updateHazeScale } from "./Haze";
 import { Star } from "./Star";
 import * as THREE from "three";
 import { generateGalaxyFromObject } from "ai-arena-map-headless";
+import { HAZE_RATIO } from "../config/config";
 export class Galaxy3D {
     constructor(scene, galaxy) {
         this.scene = scene;
@@ -18,7 +19,7 @@ export class Galaxy3D {
         this.generateStars3D();
     }
     generateHaze(numStars, arms, params) {
-        let hazeArray = generateGalaxyFromObject(numStars, arms, params, (pos) => createHaze(pos));
+        let hazeArray = generateGalaxyFromObject(numStars / HAZE_RATIO, arms, params, (pos) => createHaze(pos));
         hazeArray.forEach((h) => {
             // add haze
             this.scene.add(h);
