@@ -18,7 +18,7 @@ export class Star {
     owner : UserData | null
     bubble : THREE.Sprite | null
     nameObj : HTMLDivElement | null
-    ownerObj : HTMLDivElement | null
+    // ownerObj : HTMLDivElement | null
 
     obj : THREE.Sprite | null
     
@@ -41,7 +41,7 @@ export class Star {
         this.obj = null
         this.bubble = null
         this.nameObj = null
-        this.ownerObj = null
+        // this.ownerObj = null
     }
 
     // Update the scale of the star and associiated objects
@@ -70,14 +70,14 @@ export class Star {
             }
             updateText(this.nameObj, dist, this.position, camera, frustum, -1)
 
-            if (this.owner != null) {
+            // if (this.owner != null) {
 
-                if (this.ownerObj == null) {
-                    this.ownerObj = createText(`Owner: ${this.owner.name}`)
-                }
+            //     if (this.ownerObj == null) {
+            //         this.ownerObj = createText(`Owner: ${this.owner.name}`)
+            //     }
 
-                updateText(this.ownerObj, dist, this.position, camera, frustum, 1)
-            }
+            //     updateText(this.ownerObj, dist, this.position, camera, frustum, 1)
+            // }
 
         } else {
             if (this.nameObj != null) {
@@ -86,11 +86,11 @@ export class Star {
                 this.nameObj = null
             }
 
-            if (this.ownerObj != null) {
-                // remove text
-                this.ownerObj.remove()
-                this.ownerObj = null
-            }
+            // if (this.ownerObj != null) {
+            //     // remove text
+            //     this.ownerObj.remove()
+            //     this.ownerObj = null
+            // }
         }
     }
 

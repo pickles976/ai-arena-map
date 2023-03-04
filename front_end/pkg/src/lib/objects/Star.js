@@ -20,7 +20,7 @@ export class Star {
         this.obj = null;
         this.bubble = null;
         this.nameObj = null;
-        this.ownerObj = null;
+        // this.ownerObj = null
     }
     // Update the scale of the star and associiated objects
     updateScale(camera, frustum) {
@@ -43,12 +43,12 @@ export class Star {
                 this.nameObj = createText(this.name);
             }
             updateText(this.nameObj, dist, this.position, camera, frustum, -1);
-            if (this.owner != null) {
-                if (this.ownerObj == null) {
-                    this.ownerObj = createText(`Owner: ${this.owner.name}`);
-                }
-                updateText(this.ownerObj, dist, this.position, camera, frustum, 1);
-            }
+            // if (this.owner != null) {
+            //     if (this.ownerObj == null) {
+            //         this.ownerObj = createText(`Owner: ${this.owner.name}`)
+            //     }
+            //     updateText(this.ownerObj, dist, this.position, camera, frustum, 1)
+            // }
         }
         else {
             if (this.nameObj != null) {
@@ -56,11 +56,11 @@ export class Star {
                 this.nameObj.remove();
                 this.nameObj = null;
             }
-            if (this.ownerObj != null) {
-                // remove text
-                this.ownerObj.remove();
-                this.ownerObj = null;
-            }
+            // if (this.ownerObj != null) {
+            //     // remove text
+            //     this.ownerObj.remove()
+            //     this.ownerObj = null
+            // }
         }
     }
     // convert a star class into a three object
