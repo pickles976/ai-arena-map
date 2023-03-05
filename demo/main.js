@@ -15,6 +15,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { getRandomItem } from 'ai-arena-map-headless/pkg/src/util/util';
 
 let canvas, renderer, camera, scene, orbit, baseComposer, bloomComposer, overlayComposer, galaxy, galaxy3D, skybox
 
@@ -172,22 +173,16 @@ Math.seedrandom(1234);
 let NUM_STARS = 5000
 
 galaxy = new GalaxyData(NUM_STARS, GALAXY_PARAMS)
+// console.log(galaxy.stars[0])
 
-console.log(galaxy.stars.length)
-console.log(galaxy.stars[0])
-
-galaxy.setUsers([
-    new UserData("0", "Dave", "#FFFFFF"), 
-    new UserData("1", "Bob", "#FFFF00"), 
-    new UserData("2", "Joe", "#00FF00"), 
-    new UserData("3", "Alice", "#0000FF")
-])
-
-let star = galaxy.stars[2500]
-console.log(star)
-console.log(galaxy.getStarsInRange(star.uuid))
+for(let i =0; i < 500; i++){
+    galaxy.setUsers([
+        new UserData("0", "Dave", "#00ffff"),
+        new UserData("0", "Dave", "#aaff0a")
+    ])
+}
 
 galaxy3D = new Galaxy3D(scene, galaxy)
-
+galaxy3D.toggleBubbles(true)
 
 requestAnimationFrame(render)

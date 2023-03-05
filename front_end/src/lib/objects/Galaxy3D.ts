@@ -85,4 +85,12 @@ export class Galaxy3D {
         })
 
     }
+
+    toggleBubbles(val: boolean) {
+        this.stars.forEach((star) => {
+            if (star.bubble) {
+                star.bubble.visible = val
+            }
+        })
+    }
 }

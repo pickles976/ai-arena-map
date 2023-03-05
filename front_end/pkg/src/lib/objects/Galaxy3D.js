@@ -57,4 +57,11 @@ export class Galaxy3D {
             haze.material.needsUpdate = true;
         });
     }
+    toggleBubbles(val) {
+        this.stars.forEach((star) => {
+            if (star.bubble) {
+                star.bubble.visible = val;
+            }
+        });
+    }
 }

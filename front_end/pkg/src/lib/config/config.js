@@ -2,8 +2,8 @@
 export const STAR_MIN = 0.25;
 export const STAR_MAX = 5.0;
 // minimum and maximum sphere of influence sizes
-export const BUBBLE_MIN = 6.5;
-export const BUBBLE_MAX = 25.0;
+export const BUBBLE_MIN = 3.0;
+export const BUBBLE_MAX = 15.0;
 export const BASE_LAYER = 0;
 export const BLOOM_LAYER = 1;
 export const OVERLAY_LAYER = 2;

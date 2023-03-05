@@ -23,7 +23,7 @@ export class Star {
     obj : THREE.Sprite | null
     
     position: THREE.Vector3
-    uuid: string
+    uuid: number
     starType: number
     name: string
 

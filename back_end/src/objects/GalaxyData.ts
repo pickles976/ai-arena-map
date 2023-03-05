@@ -31,8 +31,10 @@ export class GalaxyData {
 
         this.users = users
 
-        // Get the first 1/3rd of stars
-        let tempStars = this.stars.slice(0, Math.floor(this.stars.length / 3))
+        // Get the furthest 1/4th of stars
+        let tempStars = this.stars
+        tempStars.sort((a,b)=> b.position.magnitude() - a.position.magnitude())
+        tempStars = tempStars.slice(0, Math.floor(tempStars.length / 4))
 
         this.users.forEach((user) => {
 
