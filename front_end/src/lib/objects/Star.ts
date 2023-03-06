@@ -5,7 +5,7 @@ import { StarData, UserData, starTypes } from "ai-arena-map-headless";
 import { mathGLtoTHREE } from "../util";
 
 // Sprites
-const map = new THREE.TextureLoader().load( '../../../resources/images/sprite120.png' );
+const map = new THREE.TextureLoader().load( 'https://github.com/pickles976/ai-arena-map/blob/main/front_end/resources/images/sprite120.png' );
 const materials = starTypes.color.map((color) => new THREE.SpriteMaterial( { map: map, color: color } ))
 
 // bubble mat

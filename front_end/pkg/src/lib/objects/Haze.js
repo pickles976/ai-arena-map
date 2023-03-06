@@ -4,7 +4,7 @@ import { clamp } from "../util";
 const OPACITY = 0.2;
 const MAX_SIZE = 50.0;
 const MIN_SIZE = 20.0;
-const hazeImage = new THREE.TextureLoader().load('../../../resources/images/feathered60.png');
+const hazeImage = new THREE.TextureLoader().load('https://github.com/pickles976/ai-arena-map/blob/main/front_end/resources/images/feathered60.png');
 const hazeSprite = new THREE.SpriteMaterial({ map: hazeImage, color: 0x0082ff, opacity: OPACITY, depthTest: false, depthWrite: false });
 export function createHaze(position) {
     // Shader object
